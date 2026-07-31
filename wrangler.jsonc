@@ -22,11 +22,17 @@
     "enabled": true
   },
 
-  "vars": {
-    // Overridden per environment. Must match your real domain in production,
-    // because it is what canonical URLs, OG tags and the sitemap are built from.
-    "NEXT_PUBLIC_SITE_URL": "https://wanderwithoutmaps.com"
-  }
+  // NOTE: NEXT_PUBLIC_SITE_URL is deliberately NOT set here.
+  //
+  // Next inlines NEXT_PUBLIC_* values at build time, so a runtime var in this
+  // block would arrive too late — canonical URLs, OG tags and sitemap.xml are
+  // already frozen into the prerendered output by then.
+  //
+  // Set it as a BUILD variable instead:
+  //   Cloudflare dashboard -> your Worker -> Settings -> Build ->
+  //   Variables and Secrets -> add NEXT_PUBLIC_SITE_URL
+  //
+  // Locally it falls back to the default in src/lib/site.js.
 
   // Adding ISR later? You will also need an R2 bucket and a self-reference
   // service binding here. See open-next.config.ts.

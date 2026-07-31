@@ -97,28 +97,38 @@ To check the production build locally first, on the real Workers runtime:
 npm run cf:preview   # serves at http://localhost:8787
 ```
 
-### Automated deploys (GitHub Actions)
+### Automated deploys (Cloudflare Workers Builds)
 
-`.github/workflows/deploy.yml` deploys every push to `main`.
-`.github/workflows/ci.yml` builds and smoke-tests every pull request.
+Deploys are handled by Cloudflare's own Git integration, connected to this
+repo. Every push to `main` builds and deploys automatically. No API tokens are
+needed anywhere — Cloudflare supplies its own credentials to the build.
 
-It needs three values set on the GitHub repo. **Add these yourself — never
-paste an API token into a file or a chat.**
+Settings in the Cloudflare dashboard → your Worker → **Settings → Build**:
 
-Settings → Secrets and variables → Actions:
+| Field | Value |
+| --- | --- |
+| Build command | `npx opennextjs-cloudflare build` |
+| Deploy command | `npx opennextjs-cloudflare deploy` |
+| Root directory | `/` |
 
-| Type | Name | Where to get it |
-| --- | --- | --- |
-| Secret | `CLOUDFLARE_API_TOKEN` | Cloudflare dashboard → My Profile → API Tokens → Create Token → **Edit Cloudflare Workers** template |
-| Secret | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard → Workers & Pages → right-hand sidebar |
-| Variable | `NEXT_PUBLIC_SITE_URL` | Your live URL, e.g. `https://wanderwithoutmaps.com` (no trailing slash) |
+**One required build variable.** Under **Variables and Secrets**, scoped to the
+**build** (not runtime):
 
-`NEXT_PUBLIC_SITE_URL` goes under the **Variables** tab, not Secrets — it is
-baked into the build and appears in canonical URLs, OG tags and the sitemap,
-so it must match your real domain exactly.
+```
+NEXT_PUBLIC_SITE_URL = https://yourdomain.com     (no trailing slash)
+```
 
-Until you add these, the deploy workflow fails at the last step. Nothing else
-breaks.
+This one is easy to get wrong and expensive when you do. Next inlines
+`NEXT_PUBLIC_*` values into the output at build time, so canonical URLs, OG
+tags and every entry in `sitemap.xml` are frozen the moment the build runs.
+Setting it as a *runtime* variable — or in `wrangler.jsonc` `vars` — has no
+effect on any of them, and you end up serving canonicals pointing at the wrong
+host.
+
+`.github/workflows/ci.yml` still runs on pull requests: it builds, runs the
+Cloudflare adapter build, and crawls every route. There is deliberately no
+GitHub Actions *deploy* workflow — running one alongside Cloudflare's Git
+integration means two pipelines racing to deploy the same Worker.
 
 ---
 
