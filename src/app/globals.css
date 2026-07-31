@@ -367,20 +367,20 @@ video {
 /* ---------- Reveal-on-scroll ---------- */
 
 /* Visible by default — without JS, and for crawlers, nothing is ever hidden.
-   The `js` class is set on <html> by an inline script before first paint, so
-   there is no flash of visible content before the animation arms. */
+   The `data-js` attribute is set on <html> by an inline script before first
+   paint, so there is no flash of visible content before the animation arms. */
 .reveal {
   transition:
     opacity var(--transition-slow),
     transform var(--transition-slow);
 }
 
-:root.js .reveal {
+:root[data-js] .reveal {
   opacity: 0;
   transform: translateY(24px);
 }
 
-:root.js .reveal.is-visible {
+:root[data-js] .reveal.is-visible {
   opacity: 1;
   transform: none;
 }
@@ -400,8 +400,8 @@ video {
     scroll-behavior: auto !important;
   }
 
-  :root.js .reveal,
-  :root.js .reveal.is-visible {
+  :root[data-js] .reveal,
+  :root[data-js] .reveal.is-visible {
     opacity: 1;
     transform: none;
   }

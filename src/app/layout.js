@@ -109,18 +109,28 @@ export default function RootLayout({ children }) {
   return (
     // data-scroll-behavior tells Next 16 to keep overriding smooth scrolling
     // during route transitions; without it, navigations animate their scroll.
+    // suppressHydrationWarning covers the `data-js` attribute that the inline
+    // script below adds before React hydrates. It applies only to this
+    // element's own attributes, one level deep — children are still checked
+    // normally, so real mismatches elsewhere are not hidden.
     <html
       lang="en-IN"
       data-scroll-behavior="smooth"
       className={`${outfit.variable} ${inter.variable}`}
+      suppressHydrationWarning
     >
       <head>
         {/* Runs before first paint, so scroll-reveal animations arm without a
-            flash of visible content. Without JS the class is never added and
-            everything stays permanently visible. */}
+            flash of visible content. Without JS the attribute is never set and
+            everything stays permanently visible.
+
+            This sets a `data-js` attribute rather than adding a class: React
+            renders `className` on <html>, so mutating it here would be a
+            hydration mismatch. React does not manage `data-js`, so it is safe
+            to add before hydration. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `document.documentElement.classList.add('js')`,
+            __html: `document.documentElement.setAttribute('data-js','')`,
           }}
         />
       </head>
