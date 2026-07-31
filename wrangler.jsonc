@@ -1,39 +1,39 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
 
-  // Worker name — this also becomes your free *.workers.dev subdomain,
+  // Worker name — also your free *.workers.dev subdomain,
   // e.g. wander-without-maps.<your-account>.workers.dev
   "name": "wander-without-maps",
 
-  "main": ".open-next/worker.js",
-
-  // nodejs_compat is required by the OpenNext adapter.
   "compatibility_date": "2026-07-31",
-  "compatibility_flags": ["nodejs_compat"],
 
-  // Prerendered pages, CSS, JS and images are served as static assets
-  // straight from Cloudflare's edge; only dynamic routes hit the Worker.
+  // Static assets only. There is deliberately no "main" entry, so no Worker
+  // script runs and no Worker CPU is consumed — Cloudflare serves the
+  // prerendered files straight from its edge.
+  //
+  // This is what fixes "Error 1102: Worker exceeded resource limits". The
+  // Workers Free plan allows 10ms CPU per request; the previous OpenNext SSR
+  // setup booted a 24MB Next server function on every page view, which is far
+  // beyond that. See next.config.mjs.
   "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
+    "directory": "./out",
+
+    // Next writes /about as /about/index.html. "auto-trailing-slash" resolves
+    // both /about and /about/ to that file.
+    "html_handling": "auto-trailing-slash",
+
+    // Serve the prerendered 404 page for unknown paths, with a 404 status.
+    "not_found_handling": "404-page"
   },
 
   "observability": {
     "enabled": true
-  },
+  }
 
-  // NOTE: NEXT_PUBLIC_SITE_URL is deliberately NOT set here.
-  //
-  // Next inlines NEXT_PUBLIC_* values at build time, so a runtime var in this
-  // block would arrive too late — canonical URLs, OG tags and sitemap.xml are
-  // already frozen into the prerendered output by then.
-  //
-  // Set it as a BUILD variable instead:
+  // NEXT_PUBLIC_SITE_URL is not set here on purpose. Next inlines
+  // NEXT_PUBLIC_* values at build time, so a runtime var would arrive after
+  // canonical URLs, OG tags and sitemap.xml are already written into the
+  // static output. Set it as a BUILD variable instead:
   //   Cloudflare dashboard -> your Worker -> Settings -> Build ->
-  //   Variables and Secrets -> add NEXT_PUBLIC_SITE_URL
-  //
-  // Locally it falls back to the default in src/lib/site.js.
-
-  // Adding ISR later? You will also need an R2 bucket and a self-reference
-  // service binding here. See open-next.config.ts.
+  //   Variables and Secrets
 }

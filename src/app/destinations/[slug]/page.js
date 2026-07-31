@@ -7,7 +7,7 @@ import Newsletter from '@/components/Newsletter/Newsletter';
 import { destinations, getDestination, getRelatedDestinations } from '@/data/destinations';
 import { getPackagesForDestination } from '@/data/packages';
 import { formatINR, waDestination } from '@/lib/whatsapp';
-import { site } from '@/lib/site';
+import { canonicalUrl, site } from '@/lib/site';
 import styles from './page.module.css';
 
 /** Prerender every destination at build time. */
@@ -50,7 +50,7 @@ export default async function DestinationPage({ params }) {
     name: destination.name,
     description: destination.intro,
     image: `${site.url}${destination.image}`,
-    url: `${site.url}/destinations/${destination.slug}`,
+    url: canonicalUrl(`/destinations/${destination.slug}`),
     address: {
       '@type': 'PostalAddress',
       addressLocality: destination.location,
@@ -75,7 +75,6 @@ export default async function DestinationPage({ params }) {
           <div className={styles.heroScrim} />
           <div className={`container ${styles.heroInner}`}>
             <Breadcrumbs
-              baseUrl={site.url}
               items={[
                 { href: '/', label: 'Home' },
                 { href: '/destinations', label: 'Destinations' },

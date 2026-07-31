@@ -29,13 +29,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build static export
         run: npm run build
 
-      # Catches adapter-level breakage (bundling, Node API use that Workers
-      # does not support) before it reaches a deploy on main.
-      - name: Build for Cloudflare
-        run: npx opennextjs-cloudflare build
-
+      # Serves ./out through Wrangler — the same asset server as production —
+      # and crawls every internal link, failing on any non-200.
       - name: Check every route still renders
         run: node scripts/smoke-test.mjs

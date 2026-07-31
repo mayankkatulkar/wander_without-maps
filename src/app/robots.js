@@ -1,5 +1,8 @@
 import { site } from '@/lib/site';
 
+// Required under `output: 'export'` — see the note in sitemap.js.
+export const dynamic = 'force-static';
+
 export default function robots() {
   return {
     rules: [

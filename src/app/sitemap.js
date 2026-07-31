@@ -2,7 +2,11 @@ import { destinations } from '@/data/destinations';
 import { packages } from '@/data/packages';
 import { stories } from '@/data/stories';
 import { experiences } from '@/data/experiences';
-import { site } from '@/lib/site';
+import { canonicalUrl } from '@/lib/site';
+
+// Required under `output: 'export'`: metadata routes must be declared static
+// so they are written to a file at build time rather than served on demand.
+export const dynamic = 'force-static';
 
 /**
  * XML sitemap, served at /sitemap.xml.
@@ -25,35 +29,35 @@ export default function sitemap() {
     { path: '/terms', priority: 0.2, changeFrequency: 'yearly' },
     { path: '/cookies', priority: 0.2, changeFrequency: 'yearly' },
   ].map((route) => ({
-    url: `${site.url}${route.path}`,
+    url: canonicalUrl(route.path),
     lastModified: now,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
 
   const destinationRoutes = destinations.map((d) => ({
-    url: `${site.url}/destinations/${d.slug}`,
+    url: canonicalUrl(`/destinations/${d.slug}`),
     lastModified: now,
     changeFrequency: 'monthly',
     priority: d.featured ? 0.8 : 0.7,
   }));
 
   const packageRoutes = packages.map((p) => ({
-    url: `${site.url}/packages/${p.slug}`,
+    url: canonicalUrl(`/packages/${p.slug}`),
     lastModified: now,
     changeFrequency: 'weekly',
     priority: p.featured ? 0.9 : 0.8,
   }));
 
   const experienceRoutes = experiences.map((e) => ({
-    url: `${site.url}/experiences/${e.slug}`,
+    url: canonicalUrl(`/experiences/${e.slug}`),
     lastModified: now,
     changeFrequency: 'monthly',
     priority: 0.7,
   }));
 
   const storyRoutes = stories.map((s) => ({
-    url: `${site.url}/stories/${s.slug}`,
+    url: canonicalUrl(`/stories/${s.slug}`),
     lastModified: new Date(s.date),
     changeFrequency: 'yearly',
     priority: s.featured ? 0.7 : 0.6,

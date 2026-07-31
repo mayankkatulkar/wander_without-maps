@@ -58,7 +58,6 @@ export default async function ExperiencePage({ params }) {
 
       <div className="container" style={{ paddingTop: '1.5rem' }}>
         <Breadcrumbs
-          baseUrl={site.url}
           items={[
             { href: '/', label: 'Home' },
             { href: '/experiences', label: 'Experiences' },

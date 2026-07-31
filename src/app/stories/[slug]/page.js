@@ -6,7 +6,7 @@ import { Breadcrumbs, ProseBlocks, SectionHeader } from '@/components/ui/Section
 import Newsletter from '@/components/Newsletter/Newsletter';
 import { stories, getStory, getRelatedStories, formatStoryDate } from '@/data/stories';
 import { getDestination } from '@/data/destinations';
-import { site } from '@/lib/site';
+import { canonicalUrl, site } from '@/lib/site';
 import styles from './page.module.css';
 
 export function generateStaticParams() {
@@ -55,7 +55,7 @@ export default async function StoryPage({ params }) {
     dateModified: story.date,
     author: { '@type': 'Organization', name: story.author, url: site.url },
     publisher: { '@id': `${site.url}/#organisation` },
-    mainEntityOfPage: `${site.url}/stories/${story.slug}`,
+    mainEntityOfPage: canonicalUrl(`/stories/${story.slug}`),
     keywords: story.tags.join(', '),
   };
 
@@ -75,7 +75,6 @@ export default async function StoryPage({ params }) {
           <div className={styles.heroScrim} />
           <div className={`container ${styles.heroInner}`}>
             <Breadcrumbs
-              baseUrl={site.url}
               items={[
                 { href: '/', label: 'Home' },
                 { href: '/stories', label: 'Stories' },

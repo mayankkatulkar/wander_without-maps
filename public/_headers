@@ -1,0 +1,21 @@
+# Cloudflare static-asset headers.
+#
+# These replace the headers() block in next.config.mjs, which Next.js cannot
+# apply under `output: 'export'` because there is no server in the request path.
+# Cloudflare reads this file from the root of the deployed assets.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-DNS-Prefetch-Control: on
+
+# Hashed filenames, safe to cache forever.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images are not content-hashed, so cache for a month rather than forever —
+# long enough to be cheap, short enough that replacing a photo takes effect.
+/images/*
+  Cache-Control: public, max-age=2592000

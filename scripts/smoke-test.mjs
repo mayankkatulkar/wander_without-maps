@@ -1,13 +1,17 @@
 /**
- * Starts the production server, crawls every internal link reachable from the
- * homepage, and fails if anything does not return 200.
+ * Serves the static export through Wrangler — the same asset server used in
+ * production, so trailing-slash resolution and 404 handling behave identically
+ * — then crawls every internal link reachable from the homepage and fails if
+ * anything does not return 200.
  *
  * This is the check that would have caught the state this site shipped in
  * before: nav and footer links pointing at routes that did not exist.
  *
- * Run locally with:  node scripts/smoke-test.mjs
+ * Run locally with:  npm run smoke      (builds first)
+ *                    node scripts/smoke-test.mjs   (uses an existing ./out)
  */
 import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 const PORT = process.env.SMOKE_PORT || 3123;
@@ -15,9 +19,14 @@ const BASE = `http://localhost:${PORT}`;
 const START_TIMEOUT_MS = 90_000;
 
 /** Routes we expect to exist regardless of whether anything links to them. */
-const REQUIRED = ['/', '/sitemap.xml', '/robots.txt', '/search?q=goa'];
+const REQUIRED = ['/', '/sitemap.xml', '/robots.txt', '/search/?q=goa'];
 
-const server = spawn('npx', ['next', 'start', '-p', String(PORT)], {
+if (!existsSync('out')) {
+  console.error('✗ ./out not found — run `next build` first.');
+  process.exit(1);
+}
+
+const server = spawn('npx', ['wrangler', 'dev', '--port', String(PORT), '--local'], {
   stdio: ['ignore', 'pipe', 'pipe'],
   env: process.env,
 });
@@ -56,6 +65,7 @@ async function crawl() {
   const seen = new Map();
   const queue = [...REQUIRED];
   const linkedFrom = new Map();
+  const redirected = [];
 
   while (queue.length) {
     const path = queue.shift();
@@ -66,6 +76,10 @@ async function crawl() {
     try {
       const res = await fetch(BASE + path);
       status = res.status;
+      // Internal links should point at their final URL. A redirect here means
+      // a missing trailing slash somewhere — a wasted round trip for users and
+      // an extra hop for crawlers.
+      if (res.redirected && !REQUIRED.includes(path)) redirected.push(path);
       if ((res.headers.get('content-type') || '').includes('text/html')) {
         html = await res.text();
       }
@@ -92,12 +106,12 @@ async function crawl() {
     }
   }
 
-  return { seen, linkedFrom };
+  return { seen, linkedFrom, redirected };
 }
 
 try {
   await waitForServer();
-  const { seen, linkedFrom } = await crawl();
+  const { seen, linkedFrom, redirected } = await crawl();
 
   const broken = [...seen].filter(([, status]) => status !== 200);
 
@@ -108,6 +122,11 @@ try {
       console.error(`  ${status}  ${path}${source ? `   (linked from ${source})` : ''}`);
     }
     process.exit(1);
+  }
+
+  if (redirected.length > 0) {
+    console.warn(`\n! ${redirected.length} internally-linked URLs redirected (missing trailing slash):`);
+    for (const path of redirected.slice(0, 10)) console.warn(`  ${path}`);
   }
 
   console.log(`✓ crawled ${seen.size} internal URLs, all returned 200`);

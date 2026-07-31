@@ -1,41 +1,31 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // No `output` setting: the OpenNext Cloudflare adapter builds from the
-  // standard .next output. `output: 'standalone'` is only for Node self-hosting.
+  // Fully static export to ./out — no server, no Worker invocation.
+  //
+  // Cloudflare's Workers Free plan allows 10ms CPU per request, which a
+  // Next.js SSR render is an order of magnitude over; running this site
+  // through the OpenNext adapter returned "Error 1102: Worker exceeded
+  // resource limits" on every page. Nothing here needs a server: there is no
+  // database or auth, enquiry forms are WhatsApp deep links, and search runs
+  // over data already in the bundle. So the whole site ships as static files
+  // served straight from Cloudflare's CDN.
+  output: 'export',
+
+  // Static export writes /about as /about/index.html, so links must keep the
+  // trailing slash to resolve without a server rewriting them.
+  trailingSlash: true,
 
   images: {
-    // Cloudflare Workers cannot run sharp, so Next's on-demand image optimiser
-    // is unavailable. The files in /public/images are already pre-optimised to
-    // WebP by `npm run optimize:images`, and Cloudflare serves them from its
-    // edge cache — so serving them as-is is the right trade here.
-    //
-    // To get responsive srcset back later, enable Cloudflare Images and add the
-    // `images` binding to wrangler.jsonc: https://opennext.js.org/cloudflare/howtos/image
+    // No server means no on-demand image optimisation. Files in
+    // /public/images are pre-optimised to WebP by `npm run optimize:images`.
     unoptimized: true,
-    formats: ['image/avif', 'image/webp'],
   },
 
-  headers: async () => [
-    {
-      source: '/(.*)',
-      headers: [
-        { key: 'X-DNS-Prefetch-Control', value: 'on' },
-        // Security headers. No CSP here because it needs to be tuned against
-        // whatever you add later (analytics, maps); add one before launch.
-        { key: 'X-Content-Type-Options', value: 'nosniff' },
-        { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-        { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-        { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-      ],
-    },
-    {
-      source: '/images/(.*)',
-      headers: [{ key: 'Cache-Control', value: 'public, max-age=2592000, immutable' }],
-    },
-  ],
+  // NOTE: headers() is not supported with output: 'export' — there is no
+  // server to set them. Security and caching headers live in public/_headers,
+  // which Cloudflare applies when serving static assets.
 
   poweredByHeader: false,
-  compress: true,
   reactStrictMode: true,
 };
 

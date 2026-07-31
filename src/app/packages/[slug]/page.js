@@ -8,7 +8,7 @@ import { packages, getPackage, getPackagesByPurpose } from '@/data/packages';
 import { getDestination } from '@/data/destinations';
 import { BUDGET_TIERS, TRIP_PURPOSES } from '@/data/taxonomy';
 import { formatINR, waPackage } from '@/lib/whatsapp';
-import { site } from '@/lib/site';
+import { canonicalUrl, site } from '@/lib/site';
 import styles from './page.module.css';
 
 export function generateStaticParams() {
@@ -55,7 +55,7 @@ export default async function PackagePage({ params }) {
     name: pkg.title,
     description: pkg.summary,
     image: `${site.url}${pkg.image}`,
-    url: `${site.url}/packages/${pkg.slug}`,
+    url: canonicalUrl(`/packages/${pkg.slug}`),
     touristType: purpose?.label,
     itinerary: {
       '@type': 'ItemList',
@@ -72,7 +72,7 @@ export default async function PackagePage({ params }) {
       price: pkg.priceFrom,
       priceCurrency: 'INR',
       availability: 'https://schema.org/InStock',
-      url: `${site.url}/packages/${pkg.slug}`,
+      url: canonicalUrl(`/packages/${pkg.slug}`),
       // Prices are indicative and quoted per enquiry, so state a validity
       // window rather than implying a locked-in rate.
       priceValidUntil: `${new Date().getFullYear() + 1}-03-31`,
@@ -96,7 +96,6 @@ export default async function PackagePage({ params }) {
           <div className={styles.heroScrim} />
           <div className={`container ${styles.heroInner}`}>
             <Breadcrumbs
-              baseUrl={site.url}
               items={[
                 { href: '/', label: 'Home' },
                 { href: '/packages', label: 'Packages' },

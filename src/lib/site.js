@@ -59,6 +59,24 @@ export const site = {
   ],
 };
 
+/**
+ * Absolute URL for a route, with the trailing slash Next adds under
+ * `trailingSlash: true`.
+ *
+ * Anywhere we build a URL by hand — sitemap entries, JSON-LD `item` and `url`
+ * fields — has to match the `<link rel="canonical">` Next emits exactly.
+ * Without the slash those URLs 307-redirect, which means Google follows a
+ * redirect for every sitemap entry and the structured data disagrees with the
+ * canonical.
+ */
+export function canonicalUrl(path = '/') {
+  if (!path || path === '/') return `${siteUrl}/`;
+  const clean = path.startsWith('/') ? path : `/${path}`;
+  // Leave file-like paths (sitemap.xml, robots.txt) alone.
+  if (/\.[a-z0-9]+$/i.test(clean)) return `${siteUrl}${clean}`;
+  return `${siteUrl}${clean.replace(/\/$/, '')}/`;
+}
+
 /** Primary navigation — capped at 5 items + Contact CTA, per the spec. */
 export const mainNav = [
   { href: '/destinations', label: 'Destinations' },

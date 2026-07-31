@@ -84,17 +84,31 @@ The free plan permits commercial use, includes TLS and a global CDN, and needs
 no payment method. (Vercel's free Hobby tier prohibits commercial use, which is
 why this is not on Vercel.)
 
+The site is a **fully static export**. `next build` writes plain HTML to
+`./out`, which Cloudflare serves straight from its CDN. No Worker script runs,
+so no Worker CPU is consumed.
+
+> **Why static, and not SSR?**
+> This was originally deployed through the OpenNext adapter as a server-rendered
+> Worker, and every page returned *Error 1102: Worker exceeded resource limits*.
+> The Workers **Free** plan allows **10 ms CPU per request**; booting a 24 MB
+> Next server function and rendering React is far beyond that. Nothing on this
+> site needs a server — no database, no auth, enquiry forms are WhatsApp deep
+> links, and search runs over data already in the bundle — so a static export is
+> both free and considerably faster. Server rendering would mean the Workers
+> Paid plan at $5/month.
+
 ### Deploying by hand
 
 ```bash
 npx wrangler login   # once
-npm run cf:deploy
+npm run deploy
 ```
 
-To check the production build locally first, on the real Workers runtime:
+To check it locally through the same asset server production uses:
 
 ```bash
-npm run cf:preview   # serves at http://localhost:8787
+npm run preview   # http://localhost:8787
 ```
 
 ### Automated deploys (Cloudflare Workers Builds)
@@ -107,8 +121,8 @@ Settings in the Cloudflare dashboard → your Worker → **Settings → Build**:
 
 | Field | Value |
 | --- | --- |
-| Build command | `npx opennextjs-cloudflare build` |
-| Deploy command | `npx opennextjs-cloudflare deploy` |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
 | Root directory | `/` |
 
 **One required build variable.** Under **Variables and Secrets**, scoped to the
@@ -229,17 +243,43 @@ single place to add a Server Action posting to email or a database.
 
 ### Rendering
 
-Most routes are prerendered at build time (107 pages). The hub pages
-(`/destinations`, `/packages`, `/stories`) and `/search` render per request
-because they read `searchParams` — this keeps filtered views server-rendered,
-shareable and crawlable rather than hidden behind client-side JavaScript.
+Every route is prerendered to static HTML at build time — 105 pages.
+
+The hub pages (`/destinations`, `/packages`, `/stories`) and `/search` filter
+**client-side**, via `src/lib/useUrlFilters.js`. Filter state still lives in the
+query string, so filtered views stay shareable and Back/Forward works, but it is
+read from `window.location` after mount rather than on a server.
+
+The important consequence: the first render is always *unfiltered*, so the
+prerendered HTML carries the complete catalogue — all 50 destinations are in
+`out/destinations/index.html` for crawlers and for anyone without JavaScript.
+Filtering only narrows what is already there.
+
+`useSearchParams` is deliberately avoided. It forces a Suspense boundary, and
+in a static export the prerendered HTML contains the *fallback* rather than the
+component output — which would ship empty hub pages to search engines.
+
+### URLs and trailing slashes
+
+`trailingSlash: true`, because static hosting serves `/about` as
+`/about/index.html`. Anywhere a URL is built by hand — sitemap entries, JSON-LD
+`item` and `url` fields — must go through `canonicalUrl()` in `src/lib/site.js`
+so it matches the `<link rel="canonical">` Next emits. Otherwise those URLs
+307-redirect, and search engines follow a redirect for every sitemap entry.
+
+The smoke test warns if any internally-linked URL redirects.
 
 ### Images
 
-Cloudflare Workers cannot run sharp, so Next's on-demand image optimiser is off
-(`images.unoptimized`) and images are pre-optimised at build time instead. To get
-responsive `srcset` back, enable Cloudflare Images and add the `images` binding
-to `wrangler.jsonc`.
+No server means no on-demand image optimisation (`images.unoptimized`). Images
+are pre-optimised to WebP at build time by `npm run optimize:images` and served
+from Cloudflare's edge with a one-month cache set in `public/_headers`.
+
+### Headers
+
+`headers()` in `next.config.mjs` does not work under `output: 'export'` — there
+is no server in the request path. Security and caching headers live in
+`public/_headers`, which Cloudflare applies to static assets.
 
 ---
 

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { canonicalUrl } from '@/lib/site';
 import styles from './ui.module.css';
 
 /** Section heading with an optional "view all" link on the right. */
@@ -54,7 +55,7 @@ export function PageHero({ title, subtitle, image, eyebrow, children }) {
  *
  * @param {Array<{href?: string, label: string}>} items — last item is current
  */
-export function Breadcrumbs({ items, baseUrl }) {
+export function Breadcrumbs({ items }) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -62,7 +63,9 @@ export function Breadcrumbs({ items, baseUrl }) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.label,
-      ...(item.href ? { item: `${baseUrl}${item.href}` } : {}),
+      // canonicalUrl keeps the trailing slash, so these match the page's
+      // <link rel="canonical"> exactly rather than pointing at a redirect.
+      ...(item.href ? { item: canonicalUrl(item.href) } : {}),
     })),
   };
 
