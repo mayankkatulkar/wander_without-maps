@@ -84,48 +84,101 @@ The free plan permits commercial use, includes TLS and a global CDN, and needs
 no payment method. (Vercel's free Hobby tier prohibits commercial use, which is
 why this is not on Vercel.)
 
-### First-time setup
+### Deploying by hand
 
 ```bash
-npx wrangler login
-```
-
-Then set your real domain in `wrangler.jsonc` under `vars.NEXT_PUBLIC_SITE_URL`,
-and pick a `name` — it becomes your free `*.workers.dev` subdomain.
-
-### Deploy
-
-```bash
+npx wrangler login   # once
 npm run cf:deploy
 ```
 
 To check the production build locally first, on the real Workers runtime:
 
 ```bash
-npm run cf:preview
+npm run cf:preview   # serves at http://localhost:8787
 ```
 
-That serves at http://localhost:8787.
+### Automated deploys (GitHub Actions)
 
-### Custom domain
+`.github/workflows/deploy.yml` deploys every push to `main`.
+`.github/workflows/ci.yml` builds and smoke-tests every pull request.
 
-1. Add your domain to Cloudflare (Dashboard → Add a site) and point your
-   registrar's nameservers at the ones Cloudflare gives you.
-2. Workers & Pages → your worker → Settings → Domains & Routes → Add custom
-   domain.
+It needs three values set on the GitHub repo. **Add these yourself — never
+paste an API token into a file or a chat.**
 
-TLS is issued automatically. Then update `vars.NEXT_PUBLIC_SITE_URL` in
-`wrangler.jsonc` to match and redeploy, so canonical URLs, OG tags and the
-sitemap all point at the right host.
+Settings → Secrets and variables → Actions:
 
-### Deploying from GitHub instead
+| Type | Name | Where to get it |
+| --- | --- | --- |
+| Secret | `CLOUDFLARE_API_TOKEN` | Cloudflare dashboard → My Profile → API Tokens → Create Token → **Edit Cloudflare Workers** template |
+| Secret | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard → Workers & Pages → right-hand sidebar |
+| Variable | `NEXT_PUBLIC_SITE_URL` | Your live URL, e.g. `https://wanderwithoutmaps.com` (no trailing slash) |
 
-Workers & Pages → Create → Connect to Git, select the repo, and set:
+`NEXT_PUBLIC_SITE_URL` goes under the **Variables** tab, not Secrets — it is
+baked into the build and appears in canonical URLs, OG tags and the sitemap,
+so it must match your real domain exactly.
 
-- Build command: `npx opennextjs-cloudflare build`
-- Deploy command: `npx opennextjs-cloudflare deploy`
+Until you add these, the deploy workflow fails at the last step. Nothing else
+breaks.
 
-Every push to `main` then deploys automatically.
+---
+
+## Connecting your GoDaddy domain
+
+Cloudflare Workers custom domains require Cloudflare to run your DNS. That
+means changing nameservers at GoDaddy — the domain stays registered with
+GoDaddy, only DNS moves.
+
+**1. Add the site to Cloudflare**
+
+Cloudflare dashboard → Add a site → enter your domain → choose the **Free**
+plan. Cloudflare scans your existing DNS records; check that anything you
+still need (especially `MX` records, if you use email on this domain) came
+across. Missing an MX record here is how people accidentally take their own
+email offline.
+
+Cloudflare then shows you two nameservers, something like:
+
+```
+xxxx.ns.cloudflare.com
+yyyy.ns.cloudflare.com
+```
+
+**2. Point GoDaddy at them**
+
+GoDaddy → My Products → your domain → **DNS** → Nameservers → Change →
+**I'll use my own nameservers** → enter both Cloudflare nameservers → Save.
+
+GoDaddy will warn you that this disables their DNS management. That is
+expected and correct.
+
+**3. Wait for the switch**
+
+Usually 30 minutes to a few hours, occasionally up to 24. Cloudflare emails
+you when the domain goes active. Check with:
+
+```bash
+dig +short NS wanderwithoutmaps.com
+```
+
+**4. Attach the domain to the Worker**
+
+Cloudflare dashboard → Workers & Pages → `wander-without-maps` → Settings →
+Domains & Routes → **Add** → Custom domain. Add both the apex
+(`wanderwithoutmaps.com`) and `www`. Cloudflare creates the DNS records and
+issues the TLS certificate automatically — there is nothing to configure at
+GoDaddy beyond step 2.
+
+**5. Update the site URL and redeploy**
+
+Set `vars.NEXT_PUBLIC_SITE_URL` in `wrangler.jsonc` and the
+`NEXT_PUBLIC_SITE_URL` GitHub Actions variable to the live domain, then push.
+Canonical URLs, OG tags and `sitemap.xml` are all built from it.
+
+**6. After it is live**
+
+- Submit `https://yourdomain.com/sitemap.xml` in Google Search Console
+- Confirm `https://` and `www` both resolve
+- Re-check that email still works, if the domain handles mail
 
 ---
 
