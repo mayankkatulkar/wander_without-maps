@@ -1,0 +1,97 @@
+.layout {
+  display: grid;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .layout {
+    grid-template-columns: 14rem minmax(0, 1fr);
+    gap: 4rem;
+  }
+}
+
+/* ---------- Jump nav ---------- */
+
+.nav {
+  position: static;
+}
+
+@media (min-width: 900px) {
+  .nav {
+    position: sticky;
+    top: calc(var(--header-height) + 1.5rem);
+  }
+}
+
+.navTitle {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.nav ul {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.nav a {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  border-left: 2px solid var(--color-border);
+  padding-left: 0.85rem;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.nav a:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* ---------- Content ---------- */
+
+.content {
+  min-width: 0;
+}
+
+.group + .group {
+  margin-top: 3rem;
+}
+
+.groupTitle {
+  font-size: var(--text-2xl);
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Closing CTA ---------- */
+
+.cta {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 3.5rem;
+  padding: 2.5rem;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.cta h2 {
+  font-size: var(--text-xl);
+}
+
+.cta p {
+  color: var(--color-text-secondary);
+  max-width: 52ch;
+}
+
+.ctaButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}

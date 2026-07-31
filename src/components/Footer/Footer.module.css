@@ -1,0 +1,160 @@
+.footer {
+  background-color: var(--color-bg-elevated);
+  border-top: 1px solid var(--color-border);
+  margin-top: auto;
+}
+
+.inner {
+  padding-block: var(--space-lg) var(--space-md);
+}
+
+.grid {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 3rem;
+  }
+  .brand {
+    grid-column: auto;
+  }
+}
+
+/* ---------- Brand column ---------- */
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  max-width: 34rem;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.logoMark {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.logo:hover {
+  color: var(--color-accent);
+}
+
+.tagline {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.address {
+  display: grid;
+  gap: 0.35rem;
+  font-style: normal;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.address a:hover {
+  color: var(--color-accent);
+}
+
+/* ---------- Link columns ---------- */
+
+.column ul {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.columnTitle {
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  margin-bottom: 1.1rem;
+}
+
+.column a {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.column a:hover {
+  color: var(--color-accent);
+}
+
+/* ---------- Hours ---------- */
+
+.hours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* ---------- Bottom bar ---------- */
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.bottom p {
+  margin: 0;
+}
+
+.social {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.social a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-text-secondary);
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.social a:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}

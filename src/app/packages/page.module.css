@@ -1,0 +1,53 @@
+.results {
+  margin-top: 2.5rem;
+}
+
+.filterFallback {
+  min-height: 13rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+}
+
+/* ---------- Budget tier explainer ---------- */
+
+.tierCard {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: 1.75rem;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.tierCard:hover {
+  border-color: var(--color-accent);
+  background: var(--color-bg-card-hover);
+  transform: translateY(-3px);
+  color: inherit;
+}
+
+.tierName {
+  font-size: var(--text-lg);
+}
+
+.tierBlurb {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.tierLink {
+  margin-top: 0.4rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.tierCard:hover .tierLink {
+  color: var(--color-accent);
+}

@@ -1,0 +1,67 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 34rem;
+  padding: 0.4rem 0.4rem 0.4rem 0.4rem;
+
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-full);
+  transition: border-color var(--transition-fast);
+}
+
+.bar:focus-within {
+  border-color: var(--color-accent);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.7rem 1.1rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-size: var(--text-base);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus {
+  outline: none;
+}
+
+/* Remove the browser's built-in clear affordance so the bar stays symmetrical. */
+.input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.button {
+  flex-shrink: 0;
+  padding: 0.7rem 1.6rem;
+  background: var(--color-accent);
+  color: #000;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.button:hover {
+  background: var(--color-accent-light);
+}
+
+/* Compact variant, used on the search results page. */
+.sm .input {
+  padding: 0.5rem 0.9rem;
+  font-size: var(--text-sm);
+}
+
+.sm .button {
+  padding: 0.55rem 1.2rem;
+}

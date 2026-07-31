@@ -1,0 +1,33 @@
+.wrap {
+  padding-block: var(--space-lg);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(15, 76, 58, 0.5), transparent 65%),
+    var(--color-bg-elevated);
+  border-block: 1px solid var(--color-border);
+}
+
+.inner {
+  display: grid;
+  gap: 1.1rem;
+  justify-items: center;
+  text-align: center;
+  max-width: 46rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.title {
+  font-size: var(--text-3xl);
+}
+
+.text {
+  color: var(--color-text-secondary);
+  max-width: 48ch;
+  margin: 0;
+}
+
+.compact {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding-block: var(--space-md);
+}
