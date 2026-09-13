@@ -1,6 +1,7 @@
 import { destinations } from '@/data/destinations';
 import { packages } from '@/data/packages';
 import { stories } from '@/data/stories';
+import { getMonthsFor, parseBestTime } from '@/data/seasons';
 
 /**
  * Simple in-memory search across the whole catalogue.
@@ -42,11 +43,29 @@ function score(haystacks, terms) {
   return total;
 }
 
-export function searchAll(query) {
+/**
+ * @param {string} query free-text terms
+ * @param {{purpose?: string, month?: number}} filters from the hero search and
+ *   the month tiles. Either can be used on its own — a month with no query is
+ *   a legitimate search ("where should I go in March?").
+ */
+export function searchAll(query, filters = {}) {
   const terms = normalise(query).split(/\s+/).filter(Boolean);
+  const { purpose, month } = filters;
+  const hasFilters = Boolean(purpose) || Number.isInteger(month);
 
-  if (terms.length === 0) {
+  // Nothing to go on at all.
+  if (terms.length === 0 && !hasFilters) {
     return { destinations: [], packages: [], stories: [], total: 0 };
+  }
+
+  // With filters but no search terms, every record is a candidate and the
+  // filters below do the narrowing.
+  if (terms.length === 0) {
+    return applyFilters(
+      { destinations: [...destinations], packages: [...packages], stories: [] },
+      filters
+    );
   }
 
   const matchedDestinations = destinations
@@ -106,11 +125,45 @@ export function searchAll(query) {
     .sort((a, b) => b.score - a.score)
     .map((r) => r.item);
 
+  return applyFilters(
+    {
+      destinations: matchedDestinations,
+      packages: matchedPackages,
+      stories: matchedStories,
+    },
+    filters
+  );
+}
+
+/**
+ * Narrow an already-matched result set by trip purpose and travel month.
+ *
+ * Stories are left alone: an article is worth reading whatever month you
+ * happen to be searching, and filtering them out would just make the page
+ * look emptier than the catalogue actually is.
+ */
+function applyFilters({ destinations: dests, packages: pkgs, stories: strs }, { purpose, month }) {
+  let outDests = dests;
+  let outPkgs = pkgs;
+
+  if (purpose) {
+    outPkgs = outPkgs.filter((p) => p.purpose === purpose);
+    // Keep destinations that at least one surviving package actually visits,
+    // so the two columns agree with each other.
+    const visited = new Set(outPkgs.flatMap((p) => p.destinations));
+    if (visited.size > 0) outDests = outDests.filter((d) => visited.has(d.slug));
+  }
+
+  if (Number.isInteger(month)) {
+    outDests = outDests.filter((d) => getMonthsFor(d.slug).includes(month));
+    outPkgs = outPkgs.filter((p) => parseBestTime(p.bestTime).includes(month));
+  }
+
   return {
-    destinations: matchedDestinations,
-    packages: matchedPackages,
-    stories: matchedStories,
-    total: matchedDestinations.length + matchedPackages.length + matchedStories.length,
+    destinations: outDests,
+    packages: outPkgs,
+    stories: strs,
+    total: outDests.length + outPkgs.length + strs.length,
   };
 }
 

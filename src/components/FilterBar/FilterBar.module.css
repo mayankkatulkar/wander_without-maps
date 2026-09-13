@@ -2,8 +2,8 @@
   display: grid;
   gap: 1.1rem;
   padding: 1.5rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-md);
 }
 
@@ -16,7 +16,7 @@
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.09em;
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .pills {
@@ -28,10 +28,10 @@
 .pill {
   padding: 0.45rem 1rem;
   background: transparent;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
   transition:
     border-color var(--transition-fast),
     background-color var(--transition-fast),
@@ -39,21 +39,21 @@
 }
 
 .pill:hover {
-  border-color: var(--color-border-hover);
-  color: var(--color-text);
+  border-color: var(--line-strong);
+  color: var(--ink);
 }
 
 .active {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: #000;
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
   font-weight: 600;
 }
 
 .active:hover {
-  background: var(--color-accent-light);
-  border-color: var(--color-accent-light);
-  color: #000;
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  color: #fff;
 }
 
 .meta {
@@ -62,18 +62,18 @@
   justify-content: space-between;
   gap: 1rem;
   padding-top: 0.9rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--line-cool);
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .clear {
   font-size: var(--text-sm);
-  color: var(--color-accent);
+  color: var(--blue);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .clear:hover {
-  color: var(--color-accent-light);
+  color: var(--blue-dark);
 }

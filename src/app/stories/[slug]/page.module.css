@@ -6,7 +6,7 @@
   padding-top: calc(var(--header-height) + 3rem);
   padding-bottom: 3rem;
   overflow: hidden;
-  background: var(--color-bg-elevated);
+  background: var(--cream);
 }
 
 .heroImage {
@@ -19,7 +19,7 @@
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(to top, var(--color-bg) 2%, rgba(10, 10, 10, 0.55) 55%, rgba(10, 10, 10, 0.75)),
+    linear-gradient(to top, rgba(10, 17, 24, 0.9) 2%, rgba(10, 17, 24, 0.4) 58%, rgba(10, 17, 24, 0.62)),
     linear-gradient(to right, rgba(10, 10, 10, 0.7), transparent 75%);
 }
 
@@ -35,17 +35,19 @@
   font-size: var(--text-sm);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-accent);
+  color: var(--on-dark-soft);
 }
 
 .title {
   font-size: var(--text-4xl);
+  font-weight: 400;
+  color: var(--on-dark);
   max-width: 22ch;
 }
 
 .meta {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: var(--on-dark-muted);
 }
 
 /* ---------- Layout ---------- */
@@ -68,13 +70,13 @@
 }
 
 .lede {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   line-height: 1.4;
-  color: var(--color-text);
+  color: var(--ink);
   padding-bottom: 2rem;
   margin-bottom: 2rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--line-cool);
   max-width: 30ch;
   text-wrap: balance;
 }
@@ -91,15 +93,15 @@
   gap: 0.5rem;
   margin-top: 3rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--line-cool);
 }
 
 .tag {
   padding: 0.25rem 0.75rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 /* ---------- Rail ---------- */
@@ -119,8 +121,8 @@
   display: grid;
   gap: 0.75rem;
   padding: 1.75rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-md);
 }
 
@@ -130,5 +132,5 @@
 
 .railText {
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
 }

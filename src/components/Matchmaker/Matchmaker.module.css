@@ -1,0 +1,107 @@
+.head {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: var(--text-3xl);
+}
+
+.standfirst {
+  max-width: 46ch;
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.grid {
+  display: grid;
+  gap: 1.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  color: inherit;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--cream-deep);
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover .image {
+  transform: scale(1.06);
+}
+
+.badge {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  padding: 0.32rem 0.85rem;
+  background: var(--rust);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 1.75rem;
+  flex: 1;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+}
+
+.card:hover .cardTitle {
+  color: var(--blue);
+}
+
+.text {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  flex: 1;
+}
+
+.cardCta {
+  margin-top: 0.9rem;
+  /* Rendered as a span inside the card link, so it must not capture clicks. */
+  pointer-events: none;
+}

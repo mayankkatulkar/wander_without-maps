@@ -40,7 +40,7 @@ export default function TestimonialsPage() {
               style={{
                 textAlign: 'center',
                 marginTop: '2rem',
-                color: 'var(--color-text-muted)',
+                color: 'var(--muted)',
                 fontSize: 'var(--text-sm)',
               }}
             >
@@ -49,11 +49,11 @@ export default function TestimonialsPage() {
                 href={waLink(`Hi ${site.name}! I'd like to leave a review about my trip.`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: 'var(--color-accent)', textDecoration: 'underline' }}
+                style={{ color: 'var(--blue)', textDecoration: 'underline' }}
               >
                 Send us your feedback
               </a>
-              , or <Link href="/contact" style={{ color: 'var(--color-accent)' }}>get in touch</Link>.
+              , or <Link href="/contact" style={{ color: 'var(--blue)' }}>get in touch</Link>.
             </p>
           </div>
         </section>

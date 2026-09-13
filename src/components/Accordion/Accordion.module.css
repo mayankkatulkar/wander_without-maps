@@ -4,20 +4,20 @@
 }
 
 .item {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-md);
   overflow: hidden;
   transition: border-color var(--transition-fast);
 }
 
 .item:hover {
-  border-color: var(--color-border-hover);
+  border-color: var(--line-strong);
 }
 
 .item[open] {
-  border-color: var(--color-border-hover);
-  background: var(--color-bg-card-hover);
+  border-color: var(--line-strong);
+  background: var(--paper);
 }
 
 .summary {
@@ -27,7 +27,7 @@
   gap: 1rem;
   padding: 1.15rem 1.35rem;
   cursor: pointer;
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
   font-weight: 500;
   list-style: none;
@@ -43,7 +43,7 @@
 }
 
 .summary:hover {
-  color: var(--color-accent);
+  color: var(--blue);
 }
 
 /* Plus / minus built from two bars. */
@@ -58,7 +58,7 @@
 .icon::after {
   content: '';
   position: absolute;
-  background: var(--color-accent);
+  background: var(--blue);
   transition: transform var(--transition-normal);
 }
 
@@ -84,7 +84,7 @@
 
 .answer {
   padding: 0 1.35rem 1.35rem;
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
   font-size: var(--text-base);
 }
 

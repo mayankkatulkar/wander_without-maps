@@ -4,10 +4,10 @@
 
 .updated {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: var(--muted);
   padding-bottom: 2rem;
   margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--line-cool);
 }
 
 .section + .section {
@@ -22,11 +22,11 @@
 }
 
 .number {
-  color: var(--color-accent);
+  color: var(--blue);
 }
 
 .paragraph {
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
   line-height: 1.8;
 }
 
@@ -38,7 +38,7 @@
   display: grid;
   gap: 0.65rem;
   margin-top: 1rem;
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
 }
 
 .list li {
@@ -55,5 +55,5 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--blue);
 }

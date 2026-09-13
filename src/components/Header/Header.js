@@ -7,35 +7,45 @@ import { mainNav, site } from '@/lib/site';
 import { waGeneral } from '@/lib/whatsapp';
 import styles from './Header.module.css';
 
+/**
+ * Routes that open on a full-bleed photographic hero. On these the header
+ * starts transparent with light type and turns solid on scroll; everywhere
+ * else it is solid from the first pixel, so the links never sit invisibly on
+ * a white page.
+ */
+const OPAQUE_FROM_TOP = ['/search', '/404'];
+
+function hasPhotoHero(pathname) {
+  return !OPAQUE_FROM_TOP.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const overHero = hasPhotoHero(pathname);
+  const solid = scrolled || menuOpen || !overHero;
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 32);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close the menu whenever the route changes.
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
 
-  // Lock background scroll while the mobile menu is open, and allow Escape out.
   useEffect(() => {
     if (!menuOpen) return;
-
     const previous = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-
     const onKeyDown = (event) => {
       if (event.key === 'Escape') setMenuOpen(false);
     };
     window.addEventListener('keydown', onKeyDown);
-
     return () => {
       document.body.style.overflow = previous;
       window.removeEventListener('keydown', onKeyDown);
@@ -45,14 +55,19 @@ export default function Header() {
   const isActive = (href) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className={`${styles.header} ${scrolled || menuOpen ? styles.solid : ''}`}>
+    <header className={`${styles.header} ${solid ? styles.solid : ''}`}>
       <div className={`container ${styles.inner}`}>
-        <Link href="/" className={styles.logo}>
-          <span className={styles.logoMark} aria-hidden="true" />
-          <span className={styles.logoText}>{site.name}</span>
+        <Link href="/" className={styles.logo} aria-label={`${site.name} — home`}>
+          <span className={styles.logoMark} aria-hidden="true">
+            <span className={styles.logoRule} />
+          </span>
+          <span className={styles.logoText}>
+            <span className={styles.logoName}>Wander</span>
+            <span className={styles.logoSub}>Without Maps</span>
+          </span>
         </Link>
 
-        <nav className={styles.desktopNav} aria-label="Main">
+        <nav className={styles.nav} aria-label="Main">
           <ul>
             {mainNav.map((item) => (
               <li key={item.href}>
@@ -68,12 +83,13 @@ export default function Header() {
           </ul>
         </nav>
 
-        <div className={styles.desktopActions}>
+        <div className={styles.actions}>
           <a href={site.phoneHref} className={styles.phone}>
-            {site.phone}
+            <PhoneIcon />
+            <span>{site.phone}</span>
           </a>
-          <Link href="/contact" className="btn btn-primary">
-            Plan my trip
+          <Link href="/contact" className={`btn btn-primary ${styles.cta}`}>
+            Talk to a specialist
           </Link>
         </div>
 
@@ -102,7 +118,7 @@ export default function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={isActive(item.href) ? styles.active : undefined}
+                  className={isActive(item.href) ? styles.mobileActive : undefined}
                   aria-current={isActive(item.href) ? 'page' : undefined}
                 >
                   {item.label}
@@ -130,5 +146,23 @@ export default function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+function PhoneIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
   );
 }

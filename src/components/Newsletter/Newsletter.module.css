@@ -1,14 +1,12 @@
 .wrap {
   padding-block: var(--space-lg);
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(15, 76, 58, 0.5), transparent 65%),
-    var(--color-bg-elevated);
-  border-block: 1px solid var(--color-border);
+  background: var(--cream);
+  border-top: 1px solid var(--line);
 }
 
 .inner {
   display: grid;
-  gap: 1.1rem;
+  gap: 1.15rem;
   justify-items: center;
   text-align: center;
   max-width: 46rem;
@@ -21,13 +19,13 @@
 }
 
 .text {
-  color: var(--color-text-secondary);
-  max-width: 48ch;
+  color: var(--ink-soft);
+  max-width: 50ch;
   margin: 0;
 }
 
 .compact {
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
   padding-block: var(--space-md);
 }

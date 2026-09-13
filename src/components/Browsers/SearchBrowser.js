@@ -6,6 +6,8 @@ import SearchBar from '@/components/SearchBar/SearchBar';
 import { CardGrid, DestinationCard, PackageCard, StoryCard } from '@/components/Cards/Cards';
 import { EmptyState, SectionHeader } from '@/components/ui/Section';
 import { POPULAR_SEARCHES, searchAll } from '@/lib/search';
+import { MONTHS } from '@/data/seasons';
+import { TRIP_PURPOSES } from '@/data/taxonomy';
 import { waLink } from '@/lib/whatsapp';
 import { site } from '@/lib/site';
 import styles from '@/app/search/page.module.css';
@@ -19,12 +21,20 @@ import styles from '@/app/search/page.module.css';
  */
 export default function SearchBrowser() {
   const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState({});
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const read = () => {
-      const q = new URLSearchParams(window.location.search).get('q') || '';
-      setQuery(q.trim());
+      const params = new URLSearchParams(window.location.search);
+      const monthRaw = params.get('month');
+      const month = monthRaw === null ? undefined : Number(monthRaw);
+
+      setQuery((params.get('q') || '').trim());
+      setFilters({
+        purpose: params.get('purpose') || undefined,
+        month: Number.isInteger(month) && month >= 0 && month <= 11 ? month : undefined,
+      });
       setReady(true);
     };
     read();
@@ -32,7 +42,15 @@ export default function SearchBrowser() {
     return () => window.removeEventListener('popstate', read);
   }, []);
 
-  const results = searchAll(query);
+  const results = searchAll(query, filters);
+  const hasCriteria = Boolean(query) || Boolean(filters.purpose) || Number.isInteger(filters.month);
+
+  /** Human-readable description of what is currently being searched for. */
+  const criteria = [
+    query ? `“${query}”` : null,
+    filters.purpose ? TRIP_PURPOSES[filters.purpose]?.label.toLowerCase() : null,
+    Number.isInteger(filters.month) ? `travelling in ${MONTHS[filters.month]}` : null,
+  ].filter(Boolean);
 
   return (
     <div className={styles.page}>
@@ -46,15 +64,15 @@ export default function SearchBrowser() {
             initialQuery={query}
             placeholder="Destination, package or story…"
           />
-          {ready && query ? (
+          {ready && hasCriteria ? (
             <p className={styles.count} aria-live="polite">
               {results.total} result{results.total === 1 ? '' : 's'} for{' '}
-              <strong>&ldquo;{query}&rdquo;</strong>
+              <strong>{criteria.join(' · ')}</strong>
             </p>
           ) : null}
         </header>
 
-        {!query ? (
+        {ready && !hasCriteria ? (
           <section className={styles.suggestions}>
             <p className={styles.suggestTitle}>Popular searches</p>
             <div className={styles.chips}>
@@ -71,9 +89,9 @@ export default function SearchBrowser() {
           </section>
         ) : null}
 
-        {query && results.total === 0 ? (
+        {ready && hasCriteria && results.total === 0 ? (
           <EmptyState
-            title={`Nothing matched "${query}"`}
+            title={`Nothing matched ${criteria.join(' · ')}`}
             message="We plan far more trips than are listed here. Tell us what you are looking for and we will price it properly."
             action={{ href: '/contact', label: 'Ask us directly' }}
           />
@@ -115,12 +133,12 @@ export default function SearchBrowser() {
           </section>
         ) : null}
 
-        {query && results.total > 0 ? (
+        {hasCriteria && results.total > 0 ? (
           <div className={styles.footer}>
             <p>Not quite what you were after?</p>
             <a
               href={waLink(
-                `Hi ${site.name}! I searched for "${query}" on your site. Can you help me plan something around that?`
+                `Hi ${site.name}! I searched for ${criteria.join(', ')} on your site. Can you help me plan something around that?`
               )}
               target="_blank"
               rel="noopener noreferrer"

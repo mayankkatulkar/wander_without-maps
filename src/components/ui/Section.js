@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { canonicalUrl } from '@/lib/site';
 import styles from './ui.module.css';
 
-/** Section heading with an optional "view all" link on the right. */
-export function SectionHeader({ title, subtitle, action, centered = false }) {
+/** Section heading with an optional eyebrow and "view all" link. */
+export function SectionHeader({ eyebrow, title, subtitle, action, centered = false }) {
   return (
     <div className={`${styles.sectionHeader} ${centered ? styles.centered : ''}`}>
       <div>
+        {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
         <h2 className={styles.sectionTitle}>{title}</h2>
         {subtitle ? <p className={styles.sectionSubtitle}>{subtitle}</p> : null}
       </div>
@@ -55,7 +56,7 @@ export function PageHero({ title, subtitle, image, eyebrow, children }) {
  *
  * @param {Array<{href?: string, label: string}>} items — last item is current
  */
-export function Breadcrumbs({ items }) {
+export function Breadcrumbs({ items, tone = 'dark' }) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -71,7 +72,11 @@ export function Breadcrumbs({ items }) {
 
   return (
     <>
-      <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
+      {/* tone="light" is for trails sitting on photography. */}
+      <nav
+        aria-label="Breadcrumb"
+        className={`${styles.breadcrumbs} ${tone === 'light' ? styles.breadcrumbsLight : ''}`}
+      >
         <ol>
           {items.map((item, index) => {
             const isLast = index === items.length - 1;

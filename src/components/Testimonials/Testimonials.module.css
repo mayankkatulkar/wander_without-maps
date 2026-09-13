@@ -21,8 +21,8 @@
   flex-direction: column;
   gap: 0.9rem;
   padding: 1.75rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-md);
 }
 
@@ -33,17 +33,17 @@
 }
 
 .starOn {
-  color: var(--color-accent);
+  color: var(--blue);
 }
 
 .starOff {
-  color: var(--color-text-muted);
+  color: var(--muted);
   opacity: 0.4;
 }
 
 .quote {
   font-size: var(--text-base);
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
   line-height: 1.7;
   flex: 1;
 }
@@ -62,22 +62,22 @@
   align-items: baseline;
   gap: 0.5rem;
   padding-top: 0.9rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--line-cool);
   font-size: var(--text-sm);
 }
 
 .name {
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--ink);
 }
 
 .detail {
-  color: var(--color-text-muted);
+  color: var(--muted);
   font-size: var(--text-xs);
 }
 
 .source {
   margin-left: auto;
   font-size: var(--text-xs);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }

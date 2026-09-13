@@ -10,7 +10,7 @@
   justify-items: start;
   padding-bottom: 2.5rem;
   margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--line-cool);
 }
 
 .title {
@@ -19,11 +19,11 @@
 
 .count {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .count strong {
-  color: var(--color-text);
+  color: var(--ink);
 }
 
 /* ---------- Suggestions ---------- */
@@ -37,7 +37,7 @@
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .chips {
@@ -48,19 +48,19 @@
 
 .chip {
   padding: 0.5rem 1.1rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
   transition:
     border-color var(--transition-fast),
     color var(--transition-fast);
 }
 
 .chip:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--blue);
+  color: var(--blue);
 }
 
 /* ---------- Result groups ---------- */
@@ -77,8 +77,8 @@
   gap: 1rem;
   margin-top: 3.5rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
+  border-top: 1px solid var(--line-cool);
+  color: var(--ink-soft);
 }
 
 .footer p {

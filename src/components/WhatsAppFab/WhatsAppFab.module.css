@@ -9,7 +9,7 @@
   gap: 0.6rem;
   padding: 0.9rem;
 
-  background: var(--color-whatsapp);
+  background: var(--whatsapp);
   color: #04231a;
   border-radius: var(--radius-full);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
@@ -31,7 +31,7 @@
 }
 
 .fab:hover {
-  background: var(--color-whatsapp-dark);
+  background: var(--whatsapp-dark);
   color: #04231a;
 }
 

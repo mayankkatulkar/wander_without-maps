@@ -8,7 +8,7 @@
   padding-top: calc(var(--header-height) + 3rem);
   padding-bottom: 3rem;
   overflow: hidden;
-  background: var(--color-bg-elevated);
+  background: var(--cream);
 }
 
 .heroImage {
@@ -21,7 +21,7 @@
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(to top, var(--color-bg) 2%, rgba(10, 10, 10, 0.5) 55%, rgba(10, 10, 10, 0.72)),
+    linear-gradient(to top, rgba(10, 17, 24, 0.88) 2%, rgba(10, 17, 24, 0.35) 58%, rgba(10, 17, 24, 0.6)),
     linear-gradient(to right, rgba(10, 10, 10, 0.72), transparent 70%);
 }
 
@@ -35,26 +35,28 @@
 
 .eyebrow {
   font-size: var(--text-sm);
-  color: var(--color-accent);
+  color: var(--on-dark-soft);
   letter-spacing: 0.04em;
 }
 
 .title {
   font-size: var(--text-4xl);
+  font-weight: 400;
+  color: var(--on-dark);
   max-width: 18ch;
 }
 
 .summary {
   font-size: var(--text-lg);
-  color: var(--color-text-secondary);
+  color: var(--on-dark-soft);
   max-width: 52ch;
 }
 
 /* ---------- Facts ---------- */
 
 .facts {
-  background: var(--color-bg-elevated);
-  border-block: 1px solid var(--color-border);
+  background: var(--cream);
+  border-block: 1px solid var(--line-cool);
 }
 
 .factsInner {
@@ -84,17 +86,17 @@
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .factValue,
 .factAccent {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
 }
 
 .factAccent {
-  color: var(--color-accent);
+  color: var(--blue);
 }
 
 /* ---------- Layout ---------- */
@@ -135,14 +137,14 @@
 .highlights li {
   position: relative;
   padding-left: 1.75rem;
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
 }
 
 .highlights li::before {
   content: '★';
   position: absolute;
   left: 0;
-  color: var(--color-accent);
+  color: var(--blue);
   font-size: var(--text-sm);
 }
 
@@ -169,25 +171,27 @@
   top: 38px;
   bottom: 0;
   width: 1px;
-  background: var(--color-border);
+  background: var(--line-cool);
 }
 
+/* Solid rather than outlined: the day number is the one thing people scan
+   for when re-reading an itinerary, so it needs full contrast. */
 .dayMarker {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-accent);
-  color: var(--color-accent);
-  font-family: var(--font-heading);
+  background: var(--blue);
+  color: #fff;
+  font-family: var(--font-body);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .dayBody p {
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
   margin-top: 0.35rem;
 }
 
@@ -204,7 +208,7 @@
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 /* ---------- Inclusions ---------- */
@@ -222,8 +226,8 @@
 
 .incCol {
   padding: 1.5rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-md);
 }
 
@@ -233,7 +237,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-text-muted);
+  color: var(--muted);
   margin-bottom: 1rem;
 }
 
@@ -242,7 +246,7 @@
   display: grid;
   gap: 0.65rem;
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
 }
 
 .included li,
@@ -255,7 +259,7 @@
   content: '✓';
   position: absolute;
   left: 0;
-  color: var(--color-whatsapp);
+  color: var(--whatsapp);
   font-weight: 700;
 }
 
@@ -263,7 +267,7 @@
   content: '×';
   position: absolute;
   left: 0.15rem;
-  color: var(--color-text-muted);
+  color: var(--muted);
   font-weight: 700;
 }
 
@@ -279,8 +283,8 @@
   display: grid;
   gap: 0.15rem;
   padding: 0.85rem 1.25rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-md);
   transition:
     border-color var(--transition-fast),
@@ -288,21 +292,21 @@
 }
 
 .destLink:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--blue);
+  color: var(--blue);
 }
 
 .destMeta {
   font-size: var(--text-xs);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .priceNote {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--line-cool);
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 /* ---------- Booking rail ---------- */
@@ -322,8 +326,8 @@
   display: grid;
   gap: 0.75rem;
   padding: 1.75rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-md);
 }
 
@@ -335,33 +339,33 @@
 }
 
 .railPrice strong {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: var(--text-3xl);
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--blue);
 }
 
 .railFrom,
 .railPer {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .railDuration {
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--line-cool);
 }
 
 .railLink {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: var(--muted);
   text-align: center;
 }
 
 .railLink:hover {
-  color: var(--color-accent);
+  color: var(--blue);
 }
 
 .railPoints {
@@ -369,9 +373,9 @@
   gap: 0.5rem;
   margin-top: 0.5rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--line-cool);
   font-size: var(--text-xs);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .railPoints li {
@@ -383,5 +387,5 @@
   content: '✓';
   position: absolute;
   left: 0;
-  color: var(--color-whatsapp);
+  color: var(--whatsapp);
 }

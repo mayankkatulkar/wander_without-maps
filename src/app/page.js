@@ -1,39 +1,47 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import SearchBar from '@/components/SearchBar/SearchBar';
+import HeroSearch from '@/components/HeroSearch/HeroSearch';
+import Matchmaker from '@/components/Matchmaker/Matchmaker';
+import JourneyTabs from '@/components/JourneyTabs/JourneyTabs';
 import Reveal from '@/components/Reveal/Reveal';
 import Newsletter from '@/components/Newsletter/Newsletter';
 import Testimonials from '@/components/Testimonials/Testimonials';
-import {
-  CardGrid,
-  DestinationCard,
-  ExperienceTile,
-  PackageCard,
-  StoryCard,
-} from '@/components/Cards/Cards';
+import { CardGrid, PackageCard } from '@/components/Cards/Cards';
 import { SectionHeader } from '@/components/ui/Section';
-import { getFeaturedDestinations, getDestinationsByCollection } from '@/data/destinations';
-import { getFeaturedPackages } from '@/data/packages';
-import { getHomepageExperiences } from '@/data/experiences';
-import { getLatestStories } from '@/data/stories';
-import { site } from '@/lib/site';
-import { waGeneral } from '@/lib/whatsapp';
+import { destinations, getDestinationsByCollection } from '@/data/destinations';
+import { getFeaturedPackages, packages } from '@/data/packages';
 import styles from './page.module.css';
 
 export const metadata = {
   alternates: { canonical: '/' },
 };
 
+/** Quick entry points under the hero. Every one resolves to real results. */
+const POPULAR = [
+  { label: 'Madhya Pradesh', href: '/destinations/?collection=madhya-pradesh' },
+  { label: 'Honeymoon', href: '/packages/?purpose=honeymoon' },
+  { label: 'Spiti', href: '/destinations/spiti-valley/' },
+  { label: 'Tiger safari', href: '/packages/?purpose=wildlife' },
+  { label: 'Visa-free', href: '/destinations/?collection=intl-easy' },
+];
+
 export default function HomePage() {
-  const featuredDestinations = getFeaturedDestinations(3);
-  const experiences = getHomepageExperiences();
   const featuredPackages = getFeaturedPackages(6);
-  const latestStories = getLatestStories(3);
   const mpDestinations = getDestinationsByCollection('madhya-pradesh').slice(0, 2);
+
+  /* Claims in the hero rail. Each is a fact about the catalogue or how we
+     work — there is no review count here, because there are no reviews yet. */
+  const assurances = [
+    `${destinations.length} destinations`,
+    `${packages.length} ready-made trips`,
+    'Madhya Pradesh specialists',
+    '100% tailor-made',
+    'Reachable on WhatsApp',
+  ];
 
   return (
     <>
-      {/* Block 1 — full-bleed hero with search */}
+      {/* ---------- Hero ---------- */}
       <section className={styles.hero}>
         <Image
           src="/images/hero-mountain.webp"
@@ -47,78 +55,67 @@ export default function HomePage() {
         <div className={styles.heroScrim} />
 
         <div className={`container ${styles.heroInner}`}>
-          <h1 className={styles.heroTitle}>Wander without maps</h1>
-          <p className={styles.heroSubtitle}>{site.tagline}</p>
-          <SearchBar />
-          <p className={styles.heroHint}>
-            Or{' '}
-            <a href={waGeneral()} target="_blank" rel="noopener noreferrer">
-              tell us what you want on WhatsApp
-            </a>{' '}
-            and we will plan it for you.
-          </p>
-        </div>
+          <div className={styles.heroContent}>
+            <p className="eyebrow eyebrow-light">
+              Off-the-map travel &middot; Madhya Pradesh specialists
+            </p>
 
-        <div className={styles.scrollCue} aria-hidden="true">
-          <span>Scroll</span>
-          <span className={styles.scrollLine} />
-        </div>
-      </section>
+            <h1 className={styles.heroTitle}>
+              Some places never made
+              <br />
+              <em>the guidebook.</em>
+            </h1>
 
-      {/* Trust strip */}
-      <section className={styles.trust}>
-        <div className={`container ${styles.trustInner}`}>
-          {site.trustBadges.map((badge) => (
-            <div key={badge.label} className={styles.trustItem}>
-              <strong>{badge.label}</strong>
-              <span>{badge.detail}</span>
+            <p className={styles.heroSub}>We plan the trips that go there.</p>
+
+            <HeroSearch />
+
+            <div className={styles.popular}>
+              <span className={styles.popularLabel}>Popular right now</span>
+              <ul className={styles.chips}>
+                {POPULAR.map((item) => (
+                  <li key={item.label}>
+                    <Link href={item.href} className={styles.chip}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-          ))}
+          </div>
+
+          {/* Assurance rail — staggered so it reads as a column of notes */}
+          <ul className={styles.assurances} aria-label="What we offer">
+            {assurances.map((item) => (
+              <li key={item} className={styles.assurance}>
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* Block 2 — featured destinations */}
+      {/* ---------- Feature 1: Matchmaker ---------- */}
+      <Matchmaker />
+
+      {/* ---------- Feature 2: Start your journey ---------- */}
       <Reveal as="section" className="section">
         <div className="container">
-          <SectionHeader
-            title="Featured destinations"
-            subtitle="Places we know well enough to tell you when not to go."
-            action={{ href: '/destinations', label: 'View all' }}
-          />
-          <CardGrid>
-            {featuredDestinations.map((destination, index) => (
-              <DestinationCard
-                key={destination.slug}
-                destination={destination}
-                priority={index === 0}
-              />
-            ))}
-          </CardGrid>
+          <header className={styles.journeyHead}>
+            <h2 className="signpost">Start your journey</h2>
+          </header>
+          <JourneyTabs />
         </div>
       </Reveal>
 
-      {/* Block 3 — experiences by trip type */}
-      <Reveal as="section" className="section">
-        <div className="container">
-          <SectionHeader
-            title="Browse by the kind of trip you want"
-            subtitle="Start from how you want to travel, not from where."
-            action={{ href: '/experiences', label: 'All experiences' }}
-          />
-          <CardGrid columns={4}>
-            {experiences.map((experience) => (
-              <ExperienceTile key={experience.slug} experience={experience} />
-            ))}
-          </CardGrid>
-        </div>
-      </Reveal>
-
-      {/* Madhya Pradesh specialist — the differentiator */}
+      {/* ---------- Madhya Pradesh ---------- */}
       <Reveal as="section" className={styles.mp}>
         <div className={`container ${styles.mpInner}`}>
           <div className={styles.mpText}>
-            <p className={styles.mpEyebrow}>Our speciality</p>
-            <h2 className={styles.mpTitle}>Madhya Pradesh, properly</h2>
+            <p className="eyebrow">Our speciality</p>
+            <h2 className={styles.mpTitle}>
+              Madhya Pradesh, <em>properly.</em>
+            </h2>
             <p>
               This is our home ground. Khajuraho, Pachmarhi, Bandhavgarh and Kanha are world-class
               and chronically under-visited, largely because the big agencies do not bother with
@@ -128,8 +125,11 @@ export default function HomePage() {
               We know which safari zones are worth the permit fight, which lodges are worth the
               money, and which viewpoints are empty at seven in the morning.
             </p>
-            <Link href="/destinations?collection=madhya-pradesh" className="btn btn-primary btn-lg">
+            <Link href="/destinations/?collection=madhya-pradesh" className="btn btn-primary btn-lg">
               Explore Madhya Pradesh
+              <span className="arrow" aria-hidden="true">
+                &rarr;
+              </span>
             </Link>
           </div>
 
@@ -137,7 +137,7 @@ export default function HomePage() {
             {mpDestinations.map((destination) => (
               <Link
                 key={destination.slug}
-                href={`/destinations/${destination.slug}`}
+                href={`/destinations/${destination.slug}/`}
                 className={styles.mpCard}
               >
                 <Image
@@ -154,13 +154,14 @@ export default function HomePage() {
         </div>
       </Reveal>
 
-      {/* Packages */}
-      <Reveal as="section" className="section">
+      {/* ---------- Packages ---------- */}
+      <Reveal as="section" className="section section-paper">
         <div className="container">
           <SectionHeader
-            title="Curated travel packages"
+            eyebrow="Ready when you are"
+            title="Curated journeys"
             subtitle="Every one of these is a starting point. Tell us what to change and we will requote."
-            action={{ href: '/packages', label: 'All packages' }}
+            action={{ href: '/packages/', label: 'All packages' }}
           />
           <CardGrid>
             {featuredPackages.map((pkg) => (
@@ -170,26 +171,9 @@ export default function HomePage() {
         </div>
       </Reveal>
 
-      {/* Block 4 — latest stories */}
-      <Reveal as="section" className="section">
-        <div className="container">
-          <SectionHeader
-            title="Latest stories"
-            subtitle="Field notes, packing guides and the occasional confession."
-            action={{ href: '/stories', label: 'Read the blog' }}
-          />
-          <CardGrid>
-            {latestStories.map((story) => (
-              <StoryCard key={story.slug} story={story} />
-            ))}
-          </CardGrid>
-        </div>
-      </Reveal>
-
       {/* Renders only once real reviews exist in src/data/testimonials.js */}
       <Testimonials limit={3} />
 
-      {/* Block 5 — newsletter */}
       <Newsletter />
     </>
   );

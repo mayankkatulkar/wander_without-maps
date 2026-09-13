@@ -1,4 +1,4 @@
-import { Outfit, Inter } from 'next/font/google';
+import { Cormorant_Garamond, DM_Sans, Oswald } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
@@ -6,17 +6,37 @@ import WhatsAppFab from '@/components/WhatsAppFab/WhatsAppFab';
 import { site } from '@/lib/site';
 import { getAggregateRating } from '@/data/testimonials';
 
-const outfit = Outfit({
+/**
+ * Three faces, three jobs.
+ *
+ * Cormorant Garamond carries display type — high contrast, and its italic is
+ * good enough to use as real emphasis in headlines rather than decoration.
+ * DM Sans handles everything read at length. Oswald is reserved for the
+ * condensed caps on directory-style sections, where the compressed letterform
+ * reads as signage.
+ *
+ * All three are self-hosted at build time by next/font, so no request reaches
+ * Google from the browser and there is no layout shift.
+ */
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-heading-family',
+  weight: ['300', '400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-display-family',
   display: 'swap',
 });
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-body-family',
+  display: 'swap',
+});
+
+const oswald = Oswald({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-condensed-family',
   display: 'swap',
 });
 
@@ -63,8 +83,8 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: '#0a0a0a',
-  colorScheme: 'dark',
+  themeColor: '#ffffff',
+  colorScheme: 'light',
 };
 
 /** TravelAgency structured data, emitted on every page. */
@@ -116,7 +136,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en-IN"
       data-scroll-behavior="smooth"
-      className={`${outfit.variable} ${inter.variable}`}
+      className={`${cormorant.variable} ${dmSans.variable} ${oswald.variable}`}
       suppressHydrationWarning
     >
       <head>

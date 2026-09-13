@@ -30,8 +30,8 @@
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-bg-elevated);
+  border: 1px solid var(--line-cool);
+  background: var(--cream);
 }
 
 .figureImage {
@@ -40,7 +40,7 @@
 
 .figure figcaption {
   font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 /* ---------- Principles ---------- */
@@ -61,16 +61,16 @@
   gap: 0.6rem;
   align-content: start;
   padding: 1.75rem;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-md);
 }
 
 .principleNumber {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--blue);
   opacity: 0.55;
   line-height: 1;
 }
@@ -81,7 +81,7 @@
 
 .principle p {
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
 }
 
 /* ---------- Closing CTA ---------- */
@@ -94,8 +94,8 @@
   padding: 3rem 1.5rem;
   background:
     radial-gradient(ellipse at 50% 0%, rgba(15, 76, 58, 0.4), transparent 65%),
-    var(--color-bg-card);
-  border: 1px solid var(--color-border);
+    var(--white);
+  border: 1px solid var(--line-cool);
   border-radius: var(--radius-lg);
 }
 
@@ -104,7 +104,7 @@
 }
 
 .cta p {
-  color: var(--color-text-secondary);
+  color: var(--ink-soft);
   max-width: 50ch;
 }
 

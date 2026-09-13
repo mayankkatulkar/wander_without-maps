@@ -96,6 +96,7 @@ export default async function PackagePage({ params }) {
           <div className={styles.heroScrim} />
           <div className={`container ${styles.heroInner}`}>
             <Breadcrumbs
+              tone="light"
               items={[
                 { href: '/', label: 'Home' },
                 { href: '/packages', label: 'Packages' },

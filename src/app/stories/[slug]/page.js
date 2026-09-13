@@ -75,6 +75,7 @@ export default async function StoryPage({ params }) {
           <div className={styles.heroScrim} />
           <div className={`container ${styles.heroInner}`}>
             <Breadcrumbs
+              tone="light"
               items={[
                 { href: '/', label: 'Home' },
                 { href: '/stories', label: 'Stories' },
