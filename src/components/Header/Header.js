@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { mainNav, site } from '@/lib/site';
 import { waGeneral } from '@/lib/whatsapp';
 import styles from './Header.module.css';
+import { MotionToggle } from '@/components/Motion/Motion';
 
 const NAV_ROUTES = ['/destinations', '/experiences', '/about', '/stories'];
 const NAV_LABELS = { '/about': 'Our story', '/stories': 'Journal' };
@@ -90,6 +91,7 @@ export default function Header() {
         </nav>
 
         <div className={styles.actions}>
+          <MotionToggle />
           <Link href="/search/" className={styles.search} aria-label="Search destinations and journeys">
             <SearchIcon />
           </Link>

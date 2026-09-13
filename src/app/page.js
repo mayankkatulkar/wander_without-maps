@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import CinematicHero from '@/components/CinematicHero/CinematicHero';
+import ScrollJourney from '@/components/ScrollJourney/ScrollJourney';
+import ScrollText from '@/components/ScrollText/ScrollText';
+import ScrollParallax from '@/components/ScrollParallax/ScrollParallax';
 import DestinationCollection from '@/components/DestinationCollection/DestinationCollection';
 import HeroSearch from '@/components/HeroSearch/HeroSearch';
 import Reveal from '@/components/Reveal/Reveal';
@@ -34,11 +37,13 @@ export default function HomePage() {
 
     <section className={'container ' + styles.intro}>
       <Reveal className={styles.introEyebrow}><span className={styles.smallRule} /> A DIFFERENT WAY TO GET AWAY</Reveal>
-      <Reveal delay={100}><h2>You don’t need another holiday.<br />You need a little <em>wonder.</em></h2></Reveal>
+      <ScrollText lines={[{ text: 'You don’t need another holiday.' }, { text: 'You need a little wonder.', accent: true }]} />
       <Reveal delay={200}><p>The hush before a mountain sunrise. A wrong turn that feels right.<br className={styles.desktopBreak} /> A place that stays with you, long after you’ve left.<br />That’s the kind of travel we believe in.</p></Reveal>
       <Reveal delay={250}><Link href="/about/" className={styles.textLink}>A little about us <Icon name="diagonal" size={16} /></Link></Reveal>
       <span className={styles.introCompass} aria-hidden="true"><Icon name="compass" size={135} /></span>
     </section>
+
+    <ScrollJourney />
 
     <section id="discover" className={'container ' + styles.destinations}>
       <Reveal className={styles.sectionHeading}><div><p className={styles.kicker}>01 / FIND YOUR SOMEWHERE</p><h2>Where will your<br /><em>curiosity take you?</em></h2></div><div className={styles.headingAside}><p>Some places call a little louder.<br />These are a few of ours.</p><Link href="/destinations/" className={styles.textLink}>Explore all destinations <Icon name="diagonal" size={16} /></Link></div></Reveal>
@@ -50,14 +55,14 @@ export default function HomePage() {
     <section className={styles.ways}>
       <div className="container">
         <Reveal className={styles.sectionHeading}><div><p className={styles.kicker}>02 / YOUR KIND OF WANDER</p><h2>Follow a feeling.<br /><em>We’ll find the place.</em></h2></div><p className={styles.waysAside}>There’s no one way to see the world.<br />Only the way that feels like you.</p></Reveal>
-        <div className={styles.waysGrid}>{travelWays.map((way, index) => <Reveal key={way.title} delay={index * 100}><Link className={styles.wayCard} href={way.href}><Image src={way.image} alt="" fill sizes="(max-width:640px) 90vw, 31vw" className={styles.wayImage} /><span className={styles.wayScrim} /><span className={styles.wayIcon}><Icon name={way.icon} size={22} /></span><div className={styles.wayContent}><p>{way.label}</p><h3>{way.title}</h3><span className={styles.wayDescription}>{way.description}</span><span className={styles.wayArrow}><Icon name="diagonal" size={21} /></span></div></Link></Reveal>)}</div>
+        <div className={styles.waysGrid}>{travelWays.map((way, index) => <Reveal key={way.title} variant="image" delay={index * 100}><Link className={styles.wayCard} href={way.href}><Image src={way.image} alt="" fill sizes="(max-width:640px) 90vw, 31vw" className={styles.wayImage} /><span className={styles.wayScrim} /><span className={styles.wayIcon}><Icon name={way.icon} size={22} /></span><div className={styles.wayContent}><p>{way.label}</p><h3>{way.title}</h3><span className={styles.wayDescription}>{way.description}</span><span className={styles.wayArrow}><Icon name="diagonal" size={21} /></span></div></Link></Reveal>)}</div>
       </div>
     </section>
 
     <section className={'container ' + styles.spotlight}>
       <div className={styles.spotlightMedia}>
-        <Reveal className={styles.forestFrame}><Image src="/images/dest-wildlife.webp" alt="Illustrative Bengal tiger in a sunlit forest" fill sizes="(max-width:640px) 90vw, 45vw" className={styles.spotlightImage} /><span className={styles.imageNote}><span /> WILD AT HEART</span></Reveal>
-        <Reveal delay={160} className={styles.postcard}><div><Image src="/images/dest-heritage.webp" alt="Illustrative Indian heritage architecture" fill sizes="(max-width:640px) 40vw, 220px" /></div><p>A little closer to the extraordinary.</p></Reveal>
+        <Reveal variant="image" className={styles.forestFrame}><Image src="/images/dest-wildlife.webp" alt="Illustrative Bengal tiger in a sunlit forest" fill sizes="(max-width:640px) 90vw, 45vw" className={styles.spotlightImage} /><span className={styles.imageNote}><span /> WILD AT HEART</span></Reveal>
+        <ScrollParallax strength={-90} className={styles.postcard}><div><Image src="/images/dest-heritage.webp" alt="Illustrative Indian heritage architecture" fill sizes="(max-width:640px) 40vw, 220px" /></div><p>A little closer to the extraordinary.</p></ScrollParallax>
         <span className={styles.homeStamp} aria-hidden="true"><Icon name="compass" size={25} /><span>OUR HOME.<br />YOUR NEXT ADVENTURE.</span></span>
       </div>
       <Reveal className={styles.spotlightCopy} delay={120}><p className={styles.kicker}>CLOSE TO OUR HEART. FAR FROM ORDINARY.</p><h2>India’s best-kept<br />secret.<br /><em>Our home ground.</em></h2><p>Welcome to Madhya Pradesh. A place of wild forests, ancient stories, and the kind of quiet you didn’t know you needed.</p><p>From the temple trails of Khajuraho to the tiger country of Bandhavgarh, we know this place by heart. Let us show you its soul.</p><Link href="/destinations/?collection=madhya-pradesh" className="btn btn-primary">Discover Madhya Pradesh <Icon name="diagonal" size={17} /></Link><span className={styles.signature}>From our home, with love.</span></Reveal>
@@ -84,7 +89,7 @@ export default function HomePage() {
 
     <section className={'container ' + styles.journal}>
       <Reveal className={styles.sectionHeading}><div><p className={styles.kicker}>NOTES FROM THE ROAD</p><h2>A little inspiration.<br /><em>A lot of wanderlust.</em></h2></div><Link href="/stories/" className={styles.textLink}>Open the journal <Icon name="diagonal" size={16} /></Link></Reveal>
-      <div className={styles.journalGrid}>{journal.map((story, index) => <Reveal key={story.slug} delay={index * 100}><Link href={'/stories/' + story.slug + '/'} className={styles.story}><div className={styles.storyImage}><Image src={story.image} alt="" fill sizes="(max-width:640px) 90vw, 31vw" /></div><p className={styles.storyMeta}>{story.category} <span>{story.readTime} MIN READ</span></p><h3>{story.title}</h3><span className={styles.storyLink}>Read the story <Icon name="diagonal" size={15} /></span></Link></Reveal>)}</div>
+      <div className={styles.journalGrid}>{journal.map((story, index) => <Reveal key={story.slug} variant="image" delay={index * 100}><Link href={'/stories/' + story.slug + '/'} className={styles.story}><div className={styles.storyImage}><Image src={story.image} alt="" fill sizes="(max-width:640px) 90vw, 31vw" /></div><p className={styles.storyMeta}>{story.category} <span>{story.readTime} MIN READ</span></p><h3>{story.title}</h3><span className={styles.storyLink}>Read the story <Icon name="diagonal" size={15} /></span></Link></Reveal>)}</div>
     </section>
   </>;
 }

@@ -1,0 +1,9 @@
+.plane {
+  transform: translate3d(0,var(--parallax-offset,0px),0);
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .plane {
+    transform: none;
+  }
+}

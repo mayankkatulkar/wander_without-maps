@@ -3,18 +3,18 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Fades content in as it scrolls into view.
+ * Reveals content on entry; image variants open with a soft, cinematic mask.
  *
  * This exists so pages can stay server components — only this wrapper is
  * client-side, rather than the whole page.
  *
- * The hidden state is applied by CSS scoped to `html.js` (set by an inline
+ * The hidden state is applied by CSS scoped to `html[data-js]` (set by an inline
  * script in the root layout before first paint), never by this component's
  * render. Doing it the other way round makes content paint visible, then jump
  * to hidden once React hydrates, then fade back in. It also means users
  * without JavaScript, and crawlers, always see fully visible content.
  */
-export default function Reveal({ children, as: Tag = 'div', delay = 0, className = '', ...rest }) {
+export default function Reveal({ children, as: Tag = 'div', delay = 0, variant = 'rise', className = '', style, ...rest }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
@@ -51,7 +51,8 @@ export default function Reveal({ children, as: Tag = 'div', delay = 0, className
     <Tag
       ref={ref}
       className={classes}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+      data-reveal={variant}
+      style={{ ...style, ...(delay ? { transitionDelay: `${delay}ms` } : {}) }}
       {...rest}
     >
       {children}

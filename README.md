@@ -15,7 +15,8 @@ body text. Shared typography, buttons, cards, navigation and the footer carry
 the same visual system across the catalogue and supporting pages.
 
 The homepage opens with a cinematic landscape, a manual scene chooser and trip
-search. It continues through the brand introduction, destination collections,
+search. It continues through the brand introduction, a scroll-driven three-chapter
+landscape journey, destination collections,
 travel styles, a Madhya Pradesh spotlight, signature journeys, the planning
 process, available testimonials, a landscape interlude and the travel journal.
 
@@ -23,9 +24,11 @@ process, available testimonials, a landscape interlude and the travel journal.
 signature package selections, travel-style links and journal selections.
 Destination, package and story facts remain in their existing catalogue files.
 
-Animation includes staged headline entrances, slow landscape drift, scroll
-parallax, section reveals, image hover transitions and a decorative marquee.
-`MotionProvider` shares the homepage pause control across the site and follows
+Animation includes a pinned mountain-to-desert-to-island sequence with circular
+landscape wipes, a scroll-drawn gold route, rotating compass and oversized moving
+type. Other sections use word-by-word colour fills, layered postcard parallax,
+cinematic image masks, staged headline entrances and a decorative marquee.
+`MotionProvider` shares the header and homepage pause controls across the site and follows
 the device's reduced-motion preference. Destination tabs support Left/Right,
 Home and End keys, with a swipeable card collection on small screens.
 

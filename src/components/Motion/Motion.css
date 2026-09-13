@@ -9,4 +9,50 @@ html[data-motion='paused'] .reveal {
   opacity: 1 !important;
   transform: none !important;
   transition-duration: 0.01ms !important;
+  clip-path: none !important;
+  filter: none !important;
+}
+
+html[data-motion='paused'] {
+  scroll-behavior: auto;
+}
+
+.reading-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 2px;
+  background: var(--gold);
+  z-index: 150;
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+
+.motion-toggle {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: background .2s,color .2s;
+}
+
+.motion-toggle:hover {
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.motion-toggle:disabled {
+  opacity: .6;
+  cursor: default;
+}
+
+@media (max-width:640px) {
+  .motion-toggle {
+    width: 30px;
+    height: 30px;
+  }
 }

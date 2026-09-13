@@ -21,7 +21,7 @@ data sources.
 
 1. Cinematic hero, landscape controls and trip-search dock.
 2. Service assurances and the brand introduction.
-3. Destination collections with four selectable themes.
+3. A three-chapter native-scroll landscape sequence, then destination collections with four selectable themes.
 4. Decorative travel marquee and three travel-style cards.
 5. Madhya Pradesh editorial spotlight with overlapping image frames.
 6. Three signature journeys linked to catalogue packages.
@@ -45,6 +45,7 @@ remove their underlying catalogue routes.
 | `signatureTripSlugs` | Ordered package selections |
 | `travelWays` | Travel-style titles, descriptions, labels, images, links and icons |
 | `journalSlugs` | Ordered story selections |
+| `scrollChapters` | Scroll-story copy, images, destination links and chapter labels |
 
 Use existing catalogue slugs when changing selections. Names, locations,
 durations, prices and other catalogue facts are read from `src/data/destinations.js`,
@@ -61,7 +62,11 @@ The current catalogue contains 50 destinations, 23 packages, 8 experiences and
 | `CinematicHero` | Landscape layers, staged headline entrance, slow image drift, scroll parallax, manual scene buttons and the animation control |
 | `DestinationCollection` | Ordered destination cards, accessible tabs, card entrances and mobile horizontal scrolling |
 | `MotionProvider` | Shared motion state and device reduced-motion preference |
-| `Reveal` | One-time section entrances as content enters the viewport |
+| `ScrollJourney` | Pinned landscape story, circular scene wipes, chapter controls, scroll-drawn route and compass |
+| `ScrollText` | Word-by-word ink fill tied to native scroll position |
+| `ScrollParallax` | Independent image planes, including the floating heritage postcard |
+| `useScrollProgress` | Shared viewport measurement with passive listeners and one update per animation frame |
+| `Reveal` | One-time section entrances and cinematic image-mask variants |
 | `Header` | Supplied logo, navigation, trip-planning action and mobile menu |
 | `Footer` | Closing trip-planning invitation, supplied logo, catalogue links and business contacts |
 
@@ -83,7 +88,7 @@ to the menu button.
 
 ## Motion behaviour
 
-The hero's pause button sets the shared motion state through `MotionProvider`
+The header and hero pause buttons set the shared motion state through `MotionProvider`
 in the root layout. When paused, CSS animations stop, transitions become
 effectively immediate, reveal content stays visible and hero parallax is
 disabled. This preference persists through client-side navigation for the
@@ -94,6 +99,28 @@ are observed while the page is open. When reduced motion is enabled, the
 animation button communicates the device preference and is disabled. CSS media
 queries also suppress decorative movement before hydration. Reveal content
 remains visible when JavaScript is unavailable.
+
+### Scroll choreography
+
+The landscape sequence uses the browser's normal page scroll. It pins a framed
+viewport below the header for three chapters: Breathe, Wander and Become. Scroll
+progress directly controls two circular landscape wipes, image scale, outlined
+background lettering, compass rotation and the gold route's stroke. React updates
+the active chapter only when a chapter boundary is crossed; per-frame visual
+updates use CSS properties. Scrolling backwards reverses the same sequence.
+
+Numbered chapter buttons navigate within the sequence, and a visible skip link
+goes directly to the destination collection. Inactive chapter links are removed
+from the keyboard sequence and their content is hidden from assistive technology.
+Paused motion, reduced-motion devices, short landscape viewports and JavaScript-free
+visits receive three ordinary linked image cards instead of a long pinned section.
+
+The brand statement fills from pale grey to navy and gold one word at a time.
+Travel and journal cards use a blur-to-sharp expanding image mask on entry. The
+heritage postcard moves independently of the tiger image as the section passes.
+A thin gold line at the top of the viewport shows reading progress site-wide.
+Scroll measurement is active only near each animated section, uses passive scroll
+listeners, and cancels pending animation frames when unmounted or paused.
 
 ## Image provenance
 

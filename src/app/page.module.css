@@ -7,7 +7,7 @@
 .intro h2 { margin-top:26px; font-size:clamp(36px,4.6vw,63px); line-height:1.08; letter-spacing:-.03em; }.intro h2 em { color:var(--gold); font-weight:400; }.intro p { margin:22px 0 25px; font-size:13px; line-height:1.95; color:var(--muted); }
 .textLink { display:inline-flex; gap:20px; align-items:center; font-size:11px; font-weight:500; padding-bottom:7px; border-bottom:1px solid var(--line-strong); transition:gap .3s,color .3s,border-color .3s; }.textLink:hover { gap:27px; color:var(--gold-dark); border-color:var(--gold); }.textLink svg { flex-shrink:0; }
 .introCompass { position:absolute; left:20px; top:100px; color:var(--line); opacity:.65; transform:rotate(-18deg); z-index:-1; }
-.destinations { padding-bottom:95px; scroll-margin-top:calc(var(--header-height) + 24px); }
+.destinations { padding-bottom:95px; scroll-margin-top:24px; }
 .sectionHeading { display:flex; justify-content:space-between; align-items:end; gap:30px; margin-bottom:35px; }
 .kicker { font-size:9px; letter-spacing:.18em; font-weight:500; color:var(--muted); margin-bottom:18px; }.sectionHeading h2, .spotlightCopy h2, .philosophy h2 { font-size:clamp(38px,4.5vw,62px); letter-spacing:-.035em; line-height:1.04; font-weight:400; }.sectionHeading h2 em, .spotlightCopy h2 em, .philosophy h2 em { color:var(--gold); font-weight:400; }
 .headingAside p, .waysAside { font-size:12px; line-height:1.85; color:var(--muted); margin-bottom:18px; }.headingAside { min-width:242px; }

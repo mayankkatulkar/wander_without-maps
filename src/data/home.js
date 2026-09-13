@@ -21,3 +21,9 @@ export const travelWays = [
 ];
 
 export const journalSlugs = ['finding-silence-khajuraho', 'crossing-spiti-motorcycle', 'slow-travel-kerala-backwaters'];
+
+export const scrollChapters = [
+  { id: 'breathe', word: 'Breathe.', label: 'A LITTLE PERSPECTIVE', title: 'Lose the noise.', emphasis: 'Find your quiet.', description: 'Somewhere between the mountain air and the morning light, the everyday starts to feel a world away.', image: '/images/cinematic-mountain.webp', href: '/destinations/?environment=Mountains', cta: 'Answer the mountains' },
+  { id: 'wander', word: 'Wander.', label: 'A BEAUTIFUL DETOUR', title: 'Leave the familiar.', emphasis: 'Follow the feeling.', description: 'Golden horizons. Unhurried days. The kind of wrong turn you’ll talk about for years.', image: '/images/dest-desert.webp', href: '/destinations/jaisalmer/', cta: 'Chase a golden horizon' },
+  { id: 'become', word: 'Become.', label: 'A DIFFERENT KIND OF RETURN', title: 'Go a little further.', emphasis: 'Come back different.', description: 'Salt on your skin. A little space in your mind. And a story that could only ever be yours.', image: '/images/dest-beach.webp', href: '/destinations/?environment=Islands', cta: 'Find your island time' },
+];
