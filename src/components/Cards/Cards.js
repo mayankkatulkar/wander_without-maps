@@ -14,6 +14,16 @@ import styles from './Cards.module.css';
  */
 const GRID_SIZES = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
 
+function CardArrow() {
+  return (
+    <span className={styles.mediaArrow} aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+        <path d="M6 18 18 6M6 6h12v12" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    </span>
+  );
+}
+
 export function DestinationCard({ destination, priority = false }) {
   const { slug, name, location, environment, themes, image, tagline, startingFrom } = destination;
 
@@ -32,6 +42,7 @@ export function DestinationCard({ destination, priority = false }) {
         {startingFrom ? (
           <span className={styles.price}>from {formatINR(startingFrom)}</span>
         ) : null}
+        <CardArrow />
       </div>
 
       <div className={styles.body}>
@@ -70,6 +81,7 @@ export function PackageCard({ pkg, priority = false }) {
         />
         <div className={styles.scrim} />
         <span className={styles.duration}>{duration}</span>
+        <CardArrow />
       </div>
 
       <div className={styles.body}>
@@ -115,6 +127,7 @@ export function StoryCard({ story, priority = false }) {
           className={styles.image}
         />
         <div className={styles.scrim} />
+        <CardArrow />
       </div>
 
       <div className={styles.body}>

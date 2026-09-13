@@ -1,0 +1,12 @@
+html[data-motion='paused'] *,
+html[data-motion='paused'] *::before,
+html[data-motion='paused'] *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+}
+
+html[data-motion='paused'] .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  transition-duration: 0.01ms !important;
+}

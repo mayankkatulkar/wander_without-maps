@@ -5,6 +5,7 @@ import Footer from '@/components/Footer/Footer';
 import WhatsAppFab from '@/components/WhatsAppFab/WhatsAppFab';
 import { site } from '@/lib/site';
 import { getAggregateRating } from '@/data/testimonials';
+import { MotionProvider } from '@/components/Motion/Motion';
 
 /**
  * Three faces, three jobs.
@@ -158,10 +159,12 @@ export default function RootLayout({ children }) {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <MotionProvider>
         <Header />
         <main id="main">{children}</main>
         <Footer />
         <WhatsAppFab />
+        </MotionProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organisationJsonLd()) }}

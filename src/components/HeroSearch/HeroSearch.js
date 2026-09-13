@@ -45,7 +45,7 @@ export default function HeroSearch() {
           type="search"
           value={where}
           onChange={(e) => setWhere(e.target.value)}
-          placeholder="Anywhere"
+          placeholder="Your dream destination"
           className={styles.input}
           autoComplete="off"
         />
@@ -97,7 +97,7 @@ export default function HeroSearch() {
 
       <button type="submit" className={styles.submit}>
         <SearchIcon />
-        <span>Search</span>
+        <span>Find my escape</span>
       </button>
     </form>
   );

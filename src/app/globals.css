@@ -1,44 +1,41 @@
 /* ============================================================
    Wander Without Maps — design system
 
-   Light, editorial travel-brand direction: cream and white grounds,
-   a high-contrast serif for display type with italic used as emphasis,
-   royal blue for actions, rust for eyebrows, magenta to mark active state.
-
-   Deliberately single-theme. A travel brand's palette is part of its
-   identity, and an auto-inverted dark version would undo the warmth the
-   cream grounds are doing.
+   White, generous space, navy ink and muted gold from the brand identity.
+   Editorial serif headings pair with a quiet, readable sans serif.
+   Legacy accent names remain aliases so every route shares the palette.
    ============================================================ */
 
 :root {
   /* Grounds */
-  --cream: #f4f1e6;
-  --cream-deep: #ece8d8;
+  --cream: #faf9f6;
+  --cream-deep: #eeeae2;
   --white: #ffffff;
-  --paper: #faf9f5;
+  --paper: #f7f8fa;
 
   /* Ink */
-  --ink: #13202d;
-  --ink-soft: #3d4c5a;
-  --muted: #6e7c88;
-  --muted-light: #98a3ac;
+  --ink: #112f54;
+  --ink-soft: #526274;
+  --muted: #6d7987;
+  --muted-light: #9aa4af;
 
   /* Lines */
-  --line: #e4e0d2;
-  --line-cool: #e3e7ea;
-  --line-strong: #cfcabb;
+  --line: #e8e5df;
+  --line-cool: #e8edf1;
+  --line-strong: #d1d7dd;
 
   /* Actions */
-  --blue: #1450c8;
-  --blue-dark: #0f3d9c;
-  --blue-soft: #e9eefb;
-  --blue-ink: #0c2f78;
+  --blue: #112f54;
+  --blue-dark: #0a2240;
+  --blue-soft: #edf2f7;
+  --blue-ink: #112f54;
 
   /* Accents */
-  --rust: #bf5320;
-  --rust-soft: #fbeee6;
-  --magenta: #d1005d;
-  --gold: #b08a3e;
+  --gold: #b59565;
+  --gold-dark: #8a6c40;
+  --rust: var(--gold-dark);
+  --rust-soft: #f5f0e8;
+  --magenta: var(--gold-dark);
 
   /* Utility */
   --whatsapp: #25d366;
@@ -73,20 +70,20 @@
   --space-xl: 7rem;
 
   /* Shape */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
   --radius-full: 9999px;
 
-  /* Elevation — soft and warm, never grey-blue */
-  --shadow-sm: 0 1px 2px rgba(19, 32, 45, 0.06);
-  --shadow-md: 0 4px 18px rgba(19, 32, 45, 0.08);
-  --shadow-lg: 0 16px 44px rgba(19, 32, 45, 0.13);
+  /* Soft elevation keeps white surfaces distinct without heavy outlines. */
+  --shadow-sm: 0 2px 8px rgba(17, 47, 84, 0.04);
+  --shadow-md: 0 8px 30px rgba(17, 47, 84, 0.07);
+  --shadow-lg: 0 20px 50px -12px rgba(17, 47, 84, 0.18);
 
   /* Motion */
   --transition-fast: 0.18s ease;
-  --transition-normal: 0.3s ease;
-  --transition-slow: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-normal: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-slow: 0.85s cubic-bezier(0.22, 1, 0.36, 1);
 
   --header-height: 78px;
 }
@@ -124,7 +121,7 @@ h3 {
   font-family: var(--font-display);
   font-weight: 500;
   line-height: 1.08;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
 
@@ -183,8 +180,7 @@ video {
 
 :focus-visible {
   outline: 2px solid var(--blue);
-  outline-offset: 3px;
-  border-radius: 3px;
+  outline-offset: 5px;
 }
 
 ::-webkit-scrollbar {
@@ -264,8 +260,7 @@ video {
   top: 1rem;
 }
 
-/* ---------- Eyebrow ----------
-   Small rust caps above a heading. Signals section start without a rule. */
+/* ---------- Eyebrow ---------- */
 .eyebrow {
   font-family: var(--font-body);
   font-size: var(--text-xs);
@@ -285,32 +280,34 @@ video {
   letter-spacing: 0.22em;
 }
 
-/* ---------- Condensed section heading ----------
-   Used where a section is a directory rather than an article — the
-   compressed caps read as signage, which is what those blocks are. */
+/* ---------- Compact section heading ---------- */
 .signpost {
-  font-family: var(--font-condensed);
-  font-weight: 600;
-  font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.3rem);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2rem, 1.4rem + 2vw, 3rem);
+  letter-spacing: -0.035em;
+  text-transform: none;
   line-height: 1.1;
 }
 
 /* ---------- Buttons ---------- */
 
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
-  padding: 0.9rem 1.75rem;
-  border-radius: var(--radius-sm);
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.95rem 1.65rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 500;
   font-size: var(--text-sm);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  line-height: 1.4;
   white-space: nowrap;
   cursor: pointer;
   transition:
@@ -319,10 +316,6 @@ video {
     border-color var(--transition-fast),
     box-shadow var(--transition-fast),
     transform var(--transition-fast);
-}
-
-.btn:active {
-  transform: translateY(1px);
 }
 
 .btn-primary {
@@ -335,6 +328,7 @@ video {
   background-color: var(--blue-dark);
   color: #fff;
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .btn-dark {
@@ -343,8 +337,9 @@ video {
 }
 
 .btn-dark:hover {
-  background-color: #000;
+  background-color: var(--blue-dark);
   color: #fff;
+  transform: translateY(-2px);
 }
 
 .btn-outline {
@@ -356,6 +351,7 @@ video {
 .btn-outline:hover {
   border-color: var(--blue);
   color: var(--blue);
+  background: var(--blue-soft);
 }
 
 /* On photography */
@@ -374,22 +370,36 @@ video {
 }
 
 .btn-whatsapp {
-  background-color: var(--whatsapp);
-  color: var(--whatsapp-ink);
+  background-color: var(--blue);
+  color: var(--white);
 }
 
 .btn-whatsapp:hover {
-  background-color: var(--whatsapp-dark);
-  color: var(--whatsapp-ink);
+  background-color: var(--blue-dark);
+  color: var(--white);
+  transform: translateY(-2px);
 }
 
 .btn-lg {
-  padding: 1.05rem 2.1rem;
+  min-height: 54px;
+  padding: 1.1rem 2rem;
   font-size: var(--text-sm);
 }
 
 .btn-block {
   width: 100%;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Arrow that slides on hover — used on the matchmaker cards */
@@ -508,6 +518,12 @@ video {
   :root[data-js] .reveal,
   :root[data-js] .reveal.is-visible {
     opacity: 1;
+    transform: none;
+  }
+
+  .btn:hover,
+  .btn:active,
+  .btn:hover .arrow {
     transform: none;
   }
 }

@@ -1,166 +1,54 @@
-/* Deep ink ground. The page runs cream-and-white throughout, so the footer
-   closing dark gives it a floor instead of fading out. */
-.footer {
-  background-color: var(--ink);
-  color: var(--on-dark-soft);
-  margin-top: auto;
+.footer { background: var(--white); color: var(--ink); margin-top: auto; overflow: hidden; }
+.inner { padding-top: 5rem; }
+.invitation { display: flex; align-items: center; justify-content: space-between; gap: 3rem; padding-bottom: 4.6rem; }
+.eyebrow { display: inline-flex; align-items: center; gap: 0.65rem; font-family: var(--font-body); font-size: 0.61rem; letter-spacing: 0.18em; font-weight: 500; color: var(--muted); }
+.eyebrow > span { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+.invitation h2 { margin-top: 1.5rem; font-size: clamp(2.8rem, 5.5vw, 5rem); font-weight: 400; line-height: 1.04; letter-spacing: -0.035em; }
+.invitation h2 em { color: var(--gold); font-weight: 400; }
+.journeyLink { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem; width: 144px; height: 144px; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--ink); text-align: center; flex: 0 0 auto; font-size: 0.79rem; line-height: 1.5; transition: background 350ms ease, color 350ms ease, border-color 350ms ease, transform 350ms ease; }
+.journeyLink svg { transition: transform 350ms ease; }
+.journeyLink:hover { color: var(--white); background: var(--ink); border-color: var(--ink); transform: rotate(-5deg); }
+.journeyLink:hover svg { transform: translate(3px, -3px); }
+.grid { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 3rem; padding: 3.5rem 0 4rem; border-top: 1px solid var(--line-cool); }
+.brand { display: flex; flex-direction: column; align-items: flex-start; gap: 1.2rem; max-width: 20rem; }
+/* Match the header crop without changing the provided artwork. */
+.logo { position: relative; display: block; width: 202px; aspect-ratio: 580 / 185; overflow: hidden; flex: 0 0 auto; }
+.logo img { position: absolute; width: 121.04%; max-width: none; height: auto; left: -7.76%; top: -38.9%; }
+.tagline { max-width: 15rem; font-size: 0.82rem; color: var(--muted); line-height: 1.75; }
+.contactLink { display: inline-flex; gap: 1.5rem; align-items: center; font-size: 0.78rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--line-strong); }
+.contactLink span { color: var(--gold); font-size: 1rem; transition: transform 250ms ease; }
+.contactLink:hover span { transform: translate(2px, -2px); }
+.address { display: grid; gap: 0.2rem; font-style: normal; font-size: 0.7rem; color: var(--muted); }
+.address a:hover { color: var(--ink); }
+.columnTitle { margin: 0.5rem 0 1.8rem; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.65rem; font-weight: 500; color: var(--muted); }
+.column ul { display: grid; gap: 0.9rem; }
+.column a { display: inline-block; font-size: 0.8rem; color: var(--ink-soft); transition: color 200ms ease, transform 250ms ease; }
+.column a:hover { color: var(--gold); transform: translateX(3px); }
+.bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.6rem 0 2.8rem; border-top: 1px solid var(--line-cool); font-size: 0.66rem; color: var(--muted); }
+.hours { margin-top: 0.3rem; font-size: 0.62rem; }
+.hours span { margin-inline: 0.4rem; color: var(--gold); }
+.social { display: flex; gap: 0.6rem; }
+.social a { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--line-cool); border-radius: 50%; color: var(--ink); transition: border-color 200ms ease, background 200ms ease, transform 250ms ease; }
+.social a:hover { border-color: var(--gold); background: var(--paper); transform: translateY(-3px); }
+.closing { display: flex; align-items: baseline; justify-content: space-between; gap: 2rem; padding-bottom: 0.4rem; border-top: 1px solid var(--line-cool); color: var(--ink); font-family: var(--font-display); line-height: 1.06; }
+.closing > span { font-size: clamp(5rem, 14vw, 13rem); letter-spacing: -0.055em; font-weight: 400; }
+.closing > em { font-size: clamp(2rem, 5vw, 4.8rem); font-weight: 400; letter-spacing: -0.045em; color: var(--gold); }
+@media (max-width: 1023px) { .grid { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; } .brand { grid-column: 1 / -1; } }
+@media (max-width: 639px) {
+  .inner { padding-top: 3rem; }
+  .invitation { align-items: flex-start; flex-direction: column; gap: 1.8rem; padding-bottom: 3rem; }
+  .invitation h2 { font-size: clamp(2.6rem, 10vw, 3.6rem); }
+  .journeyLink { flex-direction: row; width: auto; height: auto; min-height: 48px; padding: 0.7rem 1.2rem; gap: 1.8rem; border-radius: 30px; text-align: left; }
+  .journeyLink br { display: none; }
+  .journeyLink svg { width: 18px; height: 18px; }
+  .grid { grid-template-columns: 1fr 1fr; gap: 2.4rem 1rem; padding-block: 2.8rem; }
+  .columnTitle { margin-bottom: 1.1rem; }
+  .column a { font-size: 0.77rem; }
+  .column ul { gap: 0.7rem; }
+  .bottom { padding-bottom: 2rem; }
+  .hours { max-width: 17rem; }
+  .closing { gap: 0.3rem; flex-direction: column; padding: 0.9rem 0 1.6rem; }
+  .closing > span { font-size: clamp(4.8rem, 23vw, 8rem); }
+  .closing > em { align-self: flex-end; font-size: clamp(2rem, 8vw, 3rem); }
 }
-
-.inner {
-  padding-block: var(--space-lg) var(--space-md);
-}
-
-.grid {
-  display: grid;
-  gap: 2.75rem;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .brand {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: 2fr repeat(3, 1fr);
-    gap: 3.5rem;
-  }
-  .brand {
-    grid-column: auto;
-  }
-}
-
-/* ---------- Brand column ---------- */
-
-.brand {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.1rem;
-  max-width: 34rem;
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  font-weight: 600;
-  color: var(--on-dark);
-}
-
-.logoMark {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--gold);
-}
-
-.logo:hover {
-  color: var(--gold);
-}
-
-.tagline {
-  color: var(--on-dark-muted);
-  margin: 0;
-  font-size: var(--text-sm);
-}
-
-.address {
-  display: grid;
-  gap: 0.4rem;
-  font-style: normal;
-  font-size: var(--text-sm);
-  color: var(--on-dark-soft);
-}
-
-.address a:hover {
-  color: var(--gold);
-}
-
-/* ---------- Link columns ---------- */
-
-.column ul {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.columnTitle {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--on-dark-muted);
-  margin-bottom: 1.15rem;
-}
-
-.column a {
-  font-size: var(--text-sm);
-  color: var(--on-dark-soft);
-}
-
-.column a:hover {
-  color: var(--on-dark);
-}
-
-/* ---------- Hours ---------- */
-
-.hours {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.75rem;
-  margin-top: 2.75rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--on-dark-line);
-  font-size: var(--text-sm);
-  color: var(--on-dark-muted);
-}
-
-/* ---------- Bottom bar ---------- */
-
-.bottom {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.25rem;
-  font-size: var(--text-sm);
-  color: var(--on-dark-muted);
-}
-
-.bottom p {
-  margin: 0;
-}
-
-.social {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.social a {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--on-dark-line);
-  border-radius: 50%;
-  color: var(--on-dark-soft);
-  transition:
-    border-color var(--transition-fast),
-    color var(--transition-fast),
-    background-color var(--transition-fast);
-}
-
-.social a:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(255, 255, 255, 0.05);
-}
+@media (prefers-reduced-motion: reduce) { .journeyLink, .journeyLink svg, .contactLink span, .column a, .social a { transition: none; } }

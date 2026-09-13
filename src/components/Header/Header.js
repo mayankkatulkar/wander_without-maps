@@ -1,34 +1,28 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { mainNav, site } from '@/lib/site';
 import { waGeneral } from '@/lib/whatsapp';
 import styles from './Header.module.css';
 
-/**
- * Routes that open on a full-bleed photographic hero. On these the header
- * starts transparent with light type and turns solid on scroll; everywhere
- * else it is solid from the first pixel, so the links never sit invisibly on
- * a white page.
- */
-const OPAQUE_FROM_TOP = ['/search', '/404'];
-
-function hasPhotoHero(pathname) {
-  return !OPAQUE_FROM_TOP.some((p) => pathname === p || pathname.startsWith(`${p}/`));
-}
+const NAV_ROUTES = ['/destinations', '/experiences', '/about', '/stories'];
+const NAV_LABELS = { '/about': 'Our story', '/stories': 'Journal' };
+const navItems = NAV_ROUTES.map((href) => mainNav.find((item) => item.href === href))
+  .filter(Boolean)
+  .map((item) => ({ ...item, label: NAV_LABELS[item.href] || item.label }));
 
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const overHero = hasPhotoHero(pathname);
-  const solid = scrolled || menuOpen || !overHero;
+  const headerRef = useRef(null);
+  const menuButtonRef = useRef(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 32);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -40,43 +34,55 @@ export default function Header() {
 
   useEffect(() => {
     if (!menuOpen) return;
-    const previous = document.body.style.overflow;
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const onResize = () => {
+      if (desktop.matches) setMenuOpen(false);
+    };
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') setMenuOpen(false);
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+      if (event.key !== 'Tab') return;
+      const focusable = [...headerRef.current.querySelectorAll('a[href], button')]
+        .filter((element) => element.getClientRects().length > 0);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
+    desktop.addEventListener('change', onResize);
     return () => {
-      document.body.style.overflow = previous;
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
+      desktop.removeEventListener('change', onResize);
     };
   }, [menuOpen]);
 
-  const isActive = (href) => pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href) => pathname.replace(/\/$/, '') === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className={`${styles.header} ${solid ? styles.solid : ''}`}>
+    <header ref={headerRef} className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
       <div className={`container ${styles.inner}`}>
-        <Link href="/" className={styles.logo} aria-label={`${site.name} — home`}>
-          <span className={styles.logoMark} aria-hidden="true">
-            <span className={styles.logoRule} />
-          </span>
-          <span className={styles.logoText}>
-            <span className={styles.logoName}>Wander</span>
-            <span className={styles.logoSub}>Without Maps</span>
-          </span>
+        <Link href="/" className={styles.logo} aria-label={`${site.name} — home`} onClick={() => setMenuOpen(false)}>
+          <Image src="/images/brand-logo.png" alt="" width={702} height={341} loading="eager" />
         </Link>
 
         <nav className={styles.nav} aria-label="Main">
           <ul>
-            {mainNav.map((item) => (
+            {navItems.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={isActive(item.href) ? styles.active : undefined}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
+                <Link href={`${item.href}/`} className={isActive(item.href) ? styles.active : undefined} aria-current={isActive(item.href) ? 'page' : undefined}>
                   {item.label}
+                  {item.href === '/destinations' && <span className={styles.navDot} aria-hidden="true" />}
                 </Link>
               </li>
             ))}
@@ -84,85 +90,45 @@ export default function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <a href={site.phoneHref} className={styles.phone}>
-            <PhoneIcon />
-            <span>{site.phone}</span>
-          </a>
-          <Link href="/contact" className={`btn btn-primary ${styles.cta}`}>
-            Talk to a specialist
+          <Link href="/search/" className={styles.search} aria-label="Search destinations and journeys">
+            <SearchIcon />
           </Link>
+          <Link href="/contact/" className={styles.cta}>
+            <span>Plan my trip</span><ArrowIcon />
+          </Link>
+          <button ref={menuButtonRef} type="button" className={`${styles.burger} ${menuOpen ? styles.burgerOpen : ''}`} onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="mobile-menu" aria-label={menuOpen ? 'Close menu' : 'Open menu'}>
+            <span /><span />
+          </button>
         </div>
-
-        <button
-          type="button"
-          className={styles.burger}
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-        >
-          <span className={`${styles.bar} ${menuOpen ? styles.bar1 : ''}`} />
-          <span className={`${styles.bar} ${menuOpen ? styles.bar2 : ''}`} />
-          <span className={`${styles.bar} ${menuOpen ? styles.bar3 : ''}`} />
-        </button>
       </div>
 
-      <div
-        id="mobile-menu"
-        className={`${styles.mobileMenu} ${menuOpen ? styles.menuOpen : ''}`}
-        hidden={!menuOpen}
-      >
+      <div id="mobile-menu" className={styles.mobileMenu} hidden={!menuOpen}>
+        <span className={styles.menuEyebrow}>A world of possibilities</span>
         <nav aria-label="Mobile">
           <ul>
-            {mainNav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={isActive(item.href) ? styles.mobileActive : undefined}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
-                  {item.label}
+            {[...navItems, { href: '/packages', label: 'All journeys' }].map((item, index) => (
+              <li key={item.href} style={{ '--menu-index': index }}>
+                <Link href={`${item.href}/`} onClick={() => setMenuOpen(false)} className={isActive(item.href) ? styles.mobileActive : undefined} aria-current={isActive(item.href) ? 'page' : undefined}>
+                  <span>{item.label}</span><ArrowIcon />
                 </Link>
               </li>
             ))}
-            <li>
-              <Link href="/contact">Contact</Link>
-            </li>
           </ul>
         </nav>
-
         <div className={styles.mobileActions}>
-          <a
-            href={waGeneral()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-whatsapp btn-block"
-          >
-            Chat on WhatsApp
-          </a>
-          <a href={site.phoneHref} className="btn btn-outline btn-block">
-            Call {site.phone}
-          </a>
+          <p>Your next chapter starts with a conversation.</p>
+          <Link href="/contact/" onClick={() => setMenuOpen(false)} className={styles.mobileCta}>Let’s plan something wonderful <ArrowIcon /></Link>
+          <a href={waGeneral()} target="_blank" rel="noopener noreferrer" className={styles.mobileContact}>Chat on WhatsApp <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </header>
   );
 }
 
-function PhoneIcon() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-    </svg>
-  );
+function SearchIcon() {
+  return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 4.5 4.5" /></svg>;
+}
+
+function ArrowIcon() {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>;
 }

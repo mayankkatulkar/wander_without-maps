@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { footerNav, site } from '@/lib/site';
 import { waGeneral } from '@/lib/whatsapp';
@@ -31,30 +32,29 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.inner}`}>
+        <div className={styles.invitation}>
+          <div>
+            <span className={styles.eyebrow}><span aria-hidden="true" /> YOUR NEXT CHAPTER</span>
+            <h2>The world is calling.<br /><em>Let’s answer it.</em></h2>
+          </div>
+          <Link href="/contact/" className={styles.journeyLink}>
+            <span>Let’s plan <br />your escape</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>
+          </Link>
+        </div>
+
         <div className={styles.grid}>
           <div className={styles.brand}>
-            <Link href="/" className={styles.logo}>
-              <span className={styles.logoMark} aria-hidden="true" />
-              {site.name}
+            <Link href="/" className={styles.logo} aria-label={`${site.name} — home`}>
+              <Image src="/images/brand-logo.png" alt="" width={702} height={341} />
             </Link>
             <p className={styles.tagline}>{site.tagline}.</p>
-
+            <a href={waGeneral()} target="_blank" rel="noopener noreferrer" className={styles.contactLink}>Start a conversation <span aria-hidden="true">↗</span></a>
             <address className={styles.address}>
-              <a href={site.phoneHref}>{site.phone}</a>
               <a href={`mailto:${site.email}`}>{site.email}</a>
-              <span>
-                {site.address.locality}, {site.address.region}, {site.address.countryName}
-              </span>
+              <a href={site.phoneHref}>{site.phone}</a>
+              <span>{site.address.locality}, {site.address.countryName}</span>
             </address>
-
-            <a
-              href={waGeneral()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-whatsapp"
-            >
-              Chat on WhatsApp
-            </a>
           </div>
 
           {Object.entries(footerNav).map(([heading, links]) => (
@@ -63,7 +63,7 @@ export default function Footer() {
               <ul>
                 {links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href}>{link.label}</Link>
+                    <Link href={`${link.href}/`}>{link.href === '/stories' ? 'The journal' : link.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -71,45 +71,24 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className={styles.hours}>
-          <span>{site.hours.weekdays}</span>
-          <span>{site.hours.sunday}</span>
-        </div>
-
         <div className={styles.bottom}>
-          <p>
-            &copy; {year} {site.name}. All rights reserved.
-          </p>
-
+          <div>
+            <p>&copy; {year} {site.name}. All rights reserved.</p>
+            <p className={styles.hours}>{site.hours.weekdays} <span aria-hidden="true">·</span> {site.hours.sunday}</p>
+          </div>
           {socialEntries.length > 0 ? (
             <ul className={styles.social}>
               {socialEntries.map(([network, url]) => (
                 <li key={network}>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={network[0].toUpperCase() + network.slice(1)}
-                  >
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill={network === 'pinterest' ? 'currentColor' : 'none'}
-                      stroke={network === 'pinterest' ? 'none' : 'currentColor'}
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      {SOCIAL_ICONS[network]}
-                    </svg>
+                  <a href={url} target="_blank" rel="noopener noreferrer" aria-label={network[0].toUpperCase() + network.slice(1)}>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill={network === 'pinterest' ? 'currentColor' : 'none'} stroke={network === 'pinterest' ? 'none' : 'currentColor'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{SOCIAL_ICONS[network]}</svg>
                   </a>
                 </li>
               ))}
             </ul>
           ) : null}
         </div>
+        <div className={styles.closing} aria-hidden="true"><span>Wander</span><em>without maps.</em></div>
       </div>
     </footer>
   );

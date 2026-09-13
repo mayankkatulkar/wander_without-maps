@@ -2,9 +2,35 @@
 
 Travel agency website — Next.js 16 (App Router), deployed to Cloudflare Workers.
 
-- 45 destinations, 24 packages with full itineraries, 8 experiences, 8 stories
+- 50 destinations, 23 packages with full itineraries, 8 experiences, 8 stories
 - Site-wide search, URL-driven filters, WhatsApp lead capture
 - Sitemap, robots, and JSON-LD structured data throughout
+- White, navy and muted gold identity with a cinematic, animated homepage
+
+## Design and homepage
+
+The design takes its navy and gold accents from the supplied logo, with white
+surfaces, generous spacing, editorial serif headlines and readable sans-serif
+body text. Shared typography, buttons, cards, navigation and the footer carry
+the same visual system across the catalogue and supporting pages.
+
+The homepage opens with a cinematic landscape, a manual scene chooser and trip
+search. It continues through the brand introduction, destination collections,
+travel styles, a Madhya Pradesh spotlight, signature journeys, the planning
+process, available testimonials, a landscape interlude and the travel journal.
+
+`src/data/home.js` configures hero scenes, destination collection tabs,
+signature package selections, travel-style links and journal selections.
+Destination, package and story facts remain in their existing catalogue files.
+
+Animation includes staged headline entrances, slow landscape drift, scroll
+parallax, section reveals, image hover transitions and a decorative marquee.
+`MotionProvider` shares the homepage pause control across the site and follows
+the device's reduced-motion preference. Destination tabs support Left/Right,
+Home and End keys, with a swipeable card collection on small screens.
+
+See [the visual design guide](docs/visual-design.md) for component ownership,
+interaction details, original logo handling and the generated hero's provenance.
 
 ---
 
@@ -50,9 +76,12 @@ aggregate rating in structured data.
 
 ### 4. Photography
 
-`/public/images` holds six AI-generated placeholders reused across every entry.
-For a travel site this is the weakest part of the build — real photography of
-the places you actually sell will do more for conversion than anything else here.
+`public/images` holds six AI-generated catalogue placeholders and a new
+illustrative cinematic mountain hero. The supplied logo is preserved separately
+as `brand-logo.png`. Replace scenic placeholders with real photography of the
+places you sell; the generated hero is a fictional landscape, not a photograph
+of a bookable destination. Asset details and its generation prompt are recorded
+in [the visual design guide](docs/visual-design.md#image-provenance).
 
 Drop new images into `public/images`, then:
 
@@ -60,7 +89,9 @@ Drop new images into `public/images`, then:
 npm run optimize:images
 ```
 
-That converts to WebP at ≤1600px. Point each entry's `image` field at the result.
+That converts PNG files to WebP within 1600 × 1600 pixels without enlarging
+them. Point each entry's `image` field at the result. The supplied logo remains
+the original PNG. The cinematic hero has separately prepared WebP variants.
 
 ### 5. About page — `src/app/about/page.js`
 
@@ -76,7 +107,8 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+Check whether a development server is already running before starting another.
+Open http://localhost:3000 (or the port reported by Next.js).
 
 ## Deploying to Cloudflare Workers
 
@@ -139,8 +171,9 @@ Setting it as a *runtime* variable — or in `wrangler.jsonc` `vars` — has no
 effect on any of them, and you end up serving canonicals pointing at the wrong
 host.
 
-`.github/workflows/ci.yml` still runs on pull requests: it builds, runs the
-Cloudflare adapter build, and crawls every route. There is deliberately no
+`.github/workflows/ci.yml` runs on pull requests to `main` and pushes to other
+branches: it builds the static export and crawls internal links through the
+local Cloudflare asset server. There is deliberately no
 GitHub Actions *deploy* workflow — running one alongside Cloudflare's Git
 integration means two pipelines racing to deploy the same Worker.
 
@@ -194,9 +227,10 @@ GoDaddy beyond step 2.
 
 **5. Update the site URL and redeploy**
 
-Set `vars.NEXT_PUBLIC_SITE_URL` in `wrangler.jsonc` and the
-`NEXT_PUBLIC_SITE_URL` GitHub Actions variable to the live domain, then push.
-Canonical URLs, OG tags and `sitemap.xml` are all built from it.
+Set `NEXT_PUBLIC_SITE_URL` to the live domain in the Cloudflare build
+environment, then rebuild and redeploy. For a manual build, set it in the shell
+or local environment file before building. Canonical URLs, OG tags and
+`sitemap.xml` are all built from it; runtime variables do not change the export.
 
 **6. After it is live**
 
@@ -216,13 +250,15 @@ src/
     search.js        In-memory search across all content
   data/
     taxonomy.js      Regions, environments, themes, tiers, price bands
-    destinations.js  45 destinations
-    packages.js      24 packages with day-by-day itineraries
+    destinations.js  50 destinations
+    packages.js      23 packages with day-by-day itineraries
     experiences.js   8 thematic entry points
     stories.js       8 articles (structured blocks, not raw HTML)
+    home.js          Homepage scenes and editorial selections
     testimonials.js  Empty by design — see above
     faqs.js
-  components/        Header, Footer, Cards, FilterBar, EnquiryForm, …
+  components/        Header, Footer, CinematicHero, DestinationCollection,
+                     Motion, Reveal, Cards, FilterBar, EnquiryForm, …
   app/               App Router routes
 ```
 
@@ -243,7 +279,8 @@ single place to add a Server Action posting to email or a database.
 
 ### Rendering
 
-Every route is prerendered to static HTML at build time — 105 pages.
+Every route is prerendered to static HTML at build time. Catalogue detail routes
+are generated from the data arrays, so the page count follows the content.
 
 The hub pages (`/destinations`, `/packages`, `/stories`) and `/search` filter
 **client-side**, via `src/lib/useUrlFilters.js`. Filter state still lives in the
@@ -272,7 +309,7 @@ The smoke test warns if any internally-linked URL redirects.
 ### Images
 
 No server means no on-demand image optimisation (`images.unoptimized`). Images
-are pre-optimised to WebP at build time by `npm run optimize:images` and served
+are pre-optimised to WebP with `npm run optimize:images` and served
 from Cloudflare's edge with a one-month cache set in `public/_headers`.
 
 ### Headers
